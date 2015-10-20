@@ -1,2 +1,36 @@
-Jelle;10;150;150;1000;69;69;10
-Sebas;2;150;150;10;10;10;10
+/Naam | Level | HP | MP | XP | Attack | Defence
+/Lvl 1 - 3
+Gregory Goyle;1;150;150;1000;69;69
+Vincent Crabbe;1;150;150;10;10;10
+Pansy Parkinson;2;150;150;1000;69;69
+Myrtle Warren;2;150;150;10;10;10
+Mandrake;3;150;150;1000;69;69
+Pygmy Puff;3;150;150;10;10;10
+Jarvey;3;150;150;1000;69;69
+/ Lvl 4 - 7
+Doxy;4;150;150;10;10;10
+Giant Squid;4;150;150;1000;69;69
+Peeves The Poltergeist;4;150;150;10;10;10
+Bicorn;5;150;150;1000;69;69
+Nundu;5;150;150;10;10;10
+Mooncalf;6;150;150;1000;69;69
+Lethifold;6;150;150;10;10;10
+/ Lvl 7 - 9
+Hippogriff;7;150;150;1000;69;69
+Merpeople;7;150;150;10;10;10
+Hungarian Horntail;7;150;150;1000;69;69
+Grindylow;8;150;150;10;10;10
+Inferi;8;150;150;1000;69;69
+Erumpent;9;150;150;10;10;10
+Sphinx;9;150;150;1000;69;69
+/Lvl 9 - 10
+Sebas The Dementor;9;150;150;10;10;10
+Lupin The Werewolf;9;150;150;1000;69;69
+Nagini The Snake;9;150;150;10;10;10
+Fluffy The Three-headed Dog;10;150;150;1000;69;69
+Basilisk;10;150;150;10;10;10
+Aragog The Spider;10;150;150;1000;69;69
+Mountain Troll;10;150;150;10;10;10
+/Bosses
+Draco Malfoy;15;150;150;1000;69;69
+Lord Voldemort;15;150;150;10;10;10

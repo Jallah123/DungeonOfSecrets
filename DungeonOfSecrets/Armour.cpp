@@ -4,7 +4,6 @@ Armour::Armour()
 {
 }
 
-
 Armour::~Armour()
 {
 }

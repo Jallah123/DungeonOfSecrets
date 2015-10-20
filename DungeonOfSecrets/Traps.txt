@@ -1,0 +1,6 @@
+/Trap name HP MP
+boulder;40;0
+fire;60;0
+poison;30;50
+ebola;50;50
+unholy water;0;100

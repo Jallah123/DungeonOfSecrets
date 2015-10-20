@@ -1,11 +1,6 @@
 #include "Character.h"
 #include <iostream>
 
-Character::Character()
-{
-}
-
-
 Character::~Character()
 {
 }

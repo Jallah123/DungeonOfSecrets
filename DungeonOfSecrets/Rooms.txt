@@ -1,0 +1,5 @@
+huge ;big ;medium sized ;small ;tiny 
+bright;foggy;flooded;slimy;hot;cold
+nothing;a chair;a bed;a closet;a broom;a wand
+spiders ;cockroaches ;mice ;rats ;slimes ;unicorns 
+a candle;a torch;a fireplace

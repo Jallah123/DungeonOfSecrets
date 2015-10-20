@@ -1,9 +1,9 @@
 #include "Room.h"
+#include "RoomFactory.h"
 
-
-
-Room::Room()
+Room::Room(Difficulty Difficulty)
 {
+	Description = RoomFactory::GetInstance()->GetDescription();
 }
 
 

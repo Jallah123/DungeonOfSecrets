@@ -10,7 +10,8 @@ using namespace std;
 class Character
 {
 public:
-	Character();
+	Character() {};
+	Character(string _Name, int _Level, int _HP, int _MP, int _XP, int _BaseAttack, int _BaseDefence) { Name = _Name; Level = _Level; HP = _HP; MP = _MP; XP = _XP; BaseAttack = _BaseAttack; BaseDefence = _BaseDefence; };
 	~Character();
 	void Attack(Character& enemy) { enemy.Damage(BaseAttack + CurrentWeapon.GetDamage()); };
 	void UseItem(Item& item) { item.DoAction(); };
