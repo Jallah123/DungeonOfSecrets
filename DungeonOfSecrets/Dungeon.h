@@ -7,6 +7,6 @@ class Dungeon
 public:
 	Dungeon();
 	~Dungeon();
-	vector<Layer> Layers;
+	vector<unique_ptr<Layer>> Layers;
 };
 
