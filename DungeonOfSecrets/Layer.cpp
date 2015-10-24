@@ -23,7 +23,8 @@ void Layer::FillRooms(Difficulty difficulty)
 	{
 		for each (auto& room in roomrow)
 		{
-			room.get()->AddEnemy(CharacterFactory::GetInstance()->GetCharacterByDifficulty(difficulty));
+			for (int i = 0; i < Utility::GetInstance()->RandomNumber(0, 2); i++)
+				room.get()->AddEnemy(CharacterFactory::GetInstance()->GetCharacterByDifficulty(difficulty));
 		}
 	}
 }
