@@ -17,5 +17,6 @@ private:
 	void HandleInput(string input);
 	void Go(string direction);
 	Character Wizard;
+	Room* GetCurrentRoom();
 };
 

@@ -1,2 +1,7 @@
 #pragma once
-enum Difficulty {Easy,Medium,Hard,Boss};
+enum Difficulty {
+	Easy,
+	Medium,
+	Hard,
+	Boss
+};

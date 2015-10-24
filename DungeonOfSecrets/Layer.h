@@ -17,6 +17,7 @@ public:
 	int index = 0;
 	~Layer();
 private:
+	void FillRooms(Difficulty difficulty);
 	vector<Room*> GetAdjecentRooms(int x, int y);
 	vector<vector<unique_ptr<Room>>> Rooms;
 	void GenerateConnections();

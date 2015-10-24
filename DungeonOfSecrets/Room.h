@@ -23,6 +23,13 @@ public:
 	bool HasSouthRoom() { return AdjecentRooms.find(Directions::South) != AdjecentRooms.end(); };
 	bool HasWestRoom() { return AdjecentRooms.find(Directions::West) != AdjecentRooms.end(); };
 	bool HasNorthRoom() { return AdjecentRooms.find(Directions::North) != AdjecentRooms.end(); };
+	void AddEnemy(Character Enemy) { Enemies.push_back(Enemy); };
+	void PrintEnemies() {
+		for each (Character enemy in Enemies)
+		{
+			enemy.Print();
+		}
+	};
 	Room* GetRoomByDirection(Directions dir) { return AdjecentRooms[dir]; };
 	int GetX() { return x; }
 	int GetY() { return y; }

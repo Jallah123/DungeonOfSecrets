@@ -1,5 +1,6 @@
 #include "Layer.h"
 #include "Utility.h"
+#include "CharacterFactory.h"
 #include <iostream>
 
 Layer::Layer(Difficulty difficulty)
@@ -13,6 +14,18 @@ Layer::Layer(Difficulty difficulty)
 	}
 	LadderDownRoom = Rooms.at(Utility::GetInstance()->RandomNumber(0, 4)).at(Utility::GetInstance()->RandomNumber(0, 4)).get();
 	GenerateConnections();
+	FillRooms(difficulty);
+}
+
+void Layer::FillRooms(Difficulty difficulty)
+{
+	for each (auto& roomrow in Rooms)
+	{
+		for each (auto& room in roomrow)
+		{
+			room.get()->AddEnemy(CharacterFactory::GetInstance()->GetCharacterByDifficulty(difficulty));
+		}
+	}
 }
 
 void Layer::GenerateConnections() 

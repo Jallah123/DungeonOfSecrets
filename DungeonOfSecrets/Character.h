@@ -5,6 +5,7 @@
 #include "Weapon.h"
 #include "Armour.h"
 #include "Utility.h"
+#include <iostream>
 
 using namespace std;
 
@@ -30,6 +31,7 @@ public:
 	int GetY() { return y; };
 	void Attack(Character& enemy) { enemy.Damage(BaseAttack + CurrentWeapon.GetDamage()); };
 	void UseItem(Item& item) { item.DoAction(); };
+	void Print() { cout << Name << " HP:" << HP << "Level:" << Level << endl; };
 	void LookAtMap();
 	void ShowBag();
 	void Damage(int dmg) { HP -= dmg; };

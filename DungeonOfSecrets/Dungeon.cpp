@@ -23,6 +23,9 @@ void Dungeon::Run()
 	while (running)
 	{
 		CurrentLayer->Print();
+		
+		GetCurrentRoom()->PrintEnemies();
+
 		cout << "Hello " << Wizard.GetName() << "," << endl << "Please enter what you would like to do." << endl << "- >";
 		char command[100];
 		cin.getline(command, sizeof(command));
@@ -48,21 +51,27 @@ void Dungeon::HandleInput(string input)
 	}
 }
 
+Room* Dungeon::GetCurrentRoom() 
+{
+	return 	CurrentLayer->GetRoom(Wizard.GetX(), Wizard.GetY());
+}
+
 
 void Dungeon::Go(string Direction)
 {
 	if (Direction == "")
 	{
-		cout << "Error using command Go usage: <go> <direction>";
+		cout << "Error using command Go usage: go <direction>";
 		return;
 	}
-	Room* r = CurrentLayer->GetRoom(Wizard.GetX(), Wizard.GetY());
+	Room* r = GetCurrentRoom();
 	Directions dir = DirectionsMap[Direction];
 	switch (dir)
 	{
 	case North:
 	case South:
 	case West:
+	case Down:
 	case East:
 		if (r->GetRoomByDirection(dir) != nullptr)
 		{
@@ -72,8 +81,6 @@ void Dungeon::Go(string Direction)
 		else {
 			cout << "No room" << endl;
 		}
-		break;
-	case Down:
 		break;
 	default:
 		cout << "No known directions has been chosen.";
