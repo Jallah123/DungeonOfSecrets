@@ -30,7 +30,11 @@ public:
 			enemy.Print();
 		}
 	};
-	Room* GetRoomByDirection(Directions dir) { return AdjecentRooms[dir]; };
+	Room* GetRoomByDirection(Directions dir) { 
+		if(AdjecentRooms.find(dir) != AdjecentRooms.end())
+			return AdjecentRooms.find(dir)->second; 
+		return nullptr;
+	};
 	int GetX() { return x; }
 	int GetY() { return y; }
 	void Enter() { cout << Description << endl; visited = true; };

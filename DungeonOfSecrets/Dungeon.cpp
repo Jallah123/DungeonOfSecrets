@@ -65,28 +65,28 @@ void Dungeon::Go(string Direction)
 		return;
 	}
 	Room* r = GetCurrentRoom();
-	Directions dir = DirectionsMap[Direction];
-	switch (dir)
+	auto dir = DirectionsMap.find(Direction);
+	if (dir == DirectionsMap.end()) {
+		cout << "No such direction exists" << endl;
+		return;
+	}
+	switch (dir->second)
 	{
 	case North:
 	case South:
 	case West:
 	case Down:
 	case East:
-		if (r->GetRoomByDirection(dir) != nullptr)
+		if (r->GetRoomByDirection(dir->second) != nullptr)
 		{
-			Wizard.Move(r->GetRoomByDirection(dir)->GetX(), r->GetRoomByDirection(dir)->GetY());
-			r->GetRoomByDirection(dir)->Enter();
+			Wizard.Move(r->GetRoomByDirection(dir->second)->GetX(), r->GetRoomByDirection(dir->second)->GetY());
+			r->GetRoomByDirection(dir->second)->Enter();
 		}
 		else {
 			cout << "No room" << endl;
 		}
 		break;
-	default:
-		cout << "No known directions has been chosen.";
-		break;
 	}
-
 }
 
 Dungeon::~Dungeon()
