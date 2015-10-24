@@ -29,7 +29,7 @@ public:
 	void Move(int _X, int _Y) { x = _X; y = _Y; };
 	int GetX() { return x; };
 	int GetY() { return y; };
-	void Attack(Character& enemy) { enemy.Damage(BaseAttack + CurrentWeapon.GetDamage()); };
+	void Attack(Character& enemy) { enemy.Damage(BaseAttack + CurrentWeapon.GetDamage()); cout << "You deal " << (BaseAttack + CurrentWeapon.GetDamage()) << " damage to : " << enemy.GetName() << endl; };
 	void UseItem(Item& item) { item.DoAction(); };
 	void Print() { cout << Name << " HP:" << HP << "Level:" << Level << endl; };
 	void LookAtMap();
