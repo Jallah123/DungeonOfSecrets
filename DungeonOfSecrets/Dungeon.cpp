@@ -46,9 +46,18 @@ void Dungeon::HandleInput(string input)
 	case go:
 		Go(value);
 		break;
+	case attack:
+		AttackEnemies();
+		break;
 	default:
 		break;
 	}
+}
+
+void Dungeon::AttackEnemies()
+{
+	for (int i = 0; i < GetCurrentRoom()->GetEnemies()->size(); i++)
+		Wizard.Attack(GetCurrentRoom()->GetEnemies()->at(i));
 }
 
 Room* Dungeon::GetCurrentRoom() 

@@ -24,6 +24,7 @@ public:
 	bool HasWestRoom() { return AdjecentRooms.find(Directions::West) != AdjecentRooms.end(); };
 	bool HasNorthRoom() { return AdjecentRooms.find(Directions::North) != AdjecentRooms.end(); };
 	void AddEnemy(Character Enemy) { Enemies.push_back(Enemy); };
+	vector<Character>* GetEnemies() { return &Enemies; };
 	void PrintEnemies() {
 		for each (Character enemy in Enemies)
 		{

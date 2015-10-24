@@ -4,7 +4,7 @@ class Armour :
 	public Item
 {
 public:
-	Armour();
+	Armour() { Defence = 0; };
 	~Armour();
 private:
 	int Defence;

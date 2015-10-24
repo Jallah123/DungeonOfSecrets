@@ -18,5 +18,6 @@ private:
 	void Go(string direction);
 	Character Wizard;
 	Room* GetCurrentRoom();
+	void AttackEnemies();
 };
 
