@@ -11,6 +11,15 @@ class Character
 {
 public:
 	Character() {};
+	Character(string _Name) {
+		Name = _Name;
+		Level = 1;
+		HP = 10;
+		MP = 20;
+		XP = 0;
+		BaseAttack = 2;
+		BaseDefence = 1;
+	};
 	Character(string _Name, int _Level, int _HP, int _MP, int _XP, int _BaseAttack, int _BaseDefence) { Name = _Name; Level = _Level; HP = _HP; MP = _MP; XP = _XP; BaseAttack = _BaseAttack; BaseDefence = _BaseDefence; };
 	~Character();
 	void Attack(Character& enemy) { enemy.Damage(BaseAttack + CurrentWeapon.GetDamage()); };
@@ -20,9 +29,12 @@ public:
 	void Damage(int dmg) { HP -= dmg; };
 	void EquipArmour(Armour& armour) { CurrentArmour = armour; };
 	void EquipWeapon(Weapon& weapon) { CurrentWeapon = weapon; };
+	string GetName() { return Name; };
 	//void AddToBag(Item& item) { Bag.push_back(item); };
 private:
 	string Name;
+	int x;
+	int y;
 	int Level;
 	int HP;
 	int MP;
