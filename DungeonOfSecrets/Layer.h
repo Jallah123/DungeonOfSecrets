@@ -20,6 +20,6 @@ private:
 	void GenerateConnections();
 	Room* LadderDownRoom{ nullptr };
 	void LinkRooms(Room* room1, Room* room2);
-	void GenerateConnections(Room* room, vector<Room*> VisitedRooms);
+	vector<Room*> GenerateConnections(Room* room, vector<Room*> VisitedRooms);
 };
 

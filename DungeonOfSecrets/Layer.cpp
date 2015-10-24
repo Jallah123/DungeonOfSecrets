@@ -22,30 +22,31 @@ void Layer::GenerateConnections()
 	int x = util->RandomNumber(0, Rooms.size() - 1);
 	int y = util->RandomNumber(0, Rooms.at(x).size() - 1);
 
-	Room* CurrentRoom = Rooms.at(x).at(y).get();
+	Room* FirstRoom = Rooms.at(x).at(y).get();
 
-	GenerateConnections(CurrentRoom, VisitedRooms);
+	GenerateConnections(FirstRoom, VisitedRooms);
 }
 
-void Layer::GenerateConnections(Room* room, vector<Room*> VisitedRooms) {
+vector<Room*> Layer::GenerateConnections(Room* room, vector<Room*> VisitedRooms)
+{
+	VisitedRooms.push_back(room);
 	vector<Room*> AdjecentRooms = GetAdjecentRooms(room->GetX(), room->GetY());
-
-	while (!AdjecentRooms.empty()) {
+	while (!AdjecentRooms.empty())
+	{
 		int IndexChosenNeighbor = Utility::GetInstance()->RandomNumber(0, AdjecentRooms.size() - 1);
 		Room* ChosenNeighbor = AdjecentRooms.at(IndexChosenNeighbor);
-		if (VisitedRooms.size() == Rooms.size())
-			return;
-		if (find(VisitedRooms.begin(), VisitedRooms.end(), ChosenNeighbor) == VisitedRooms.end()) {
+
+		if (find(VisitedRooms.begin(), VisitedRooms.end(), ChosenNeighbor) == VisitedRooms.end())
+		{
 			LinkRooms(room, ChosenNeighbor);
-			VisitedRooms.push_back(room);
-			Room* CurrentRoom = ChosenNeighbor;
-			GenerateConnections(CurrentRoom, VisitedRooms);
+			VisitedRooms = GenerateConnections(ChosenNeighbor, VisitedRooms);
 		}
-		else {
-			auto index = find(AdjecentRooms.begin(), AdjecentRooms.end(), ChosenNeighbor);
-			AdjecentRooms.erase(index);
+		else 
+		{
+			AdjecentRooms.erase(AdjecentRooms.begin() + IndexChosenNeighbor);
 		}
 	}
+	return VisitedRooms;
 }
 
 void Layer::LinkRooms(Room* room1, Room* room2)
@@ -71,25 +72,28 @@ Directions Layer::GetDirectionToRoom(int currentX, int currentY, int destX, int 
 vector<Room*> Layer::GetAdjecentRooms(int x, int y) 
 {
 	vector<Room*> AdjecentRooms;
-	
-	if (x - 1 >= 0) {
-		if (Rooms.at(x - 1).at(y) != nullptr) {
-			AdjecentRooms.push_back(Rooms.at(x - 1).at(y).get());
+	int diff = x - 1;
+	if (diff >= 0) {
+		if (Rooms.at(y).at(diff) != nullptr) {
+			AdjecentRooms.push_back(Rooms.at(y).at(diff).get());
 		}
 	}
-	if (x + 1 <= Rooms.size() - 1) {
-		if (Rooms.at(x + 1).at(y) != nullptr) {
-			AdjecentRooms.push_back(Rooms.at(x + 1).at(y).get());
+	diff = x + 1;
+	if (diff <= Rooms.size() - 1) {
+		if (Rooms.at(y).at(diff) != nullptr) {
+			AdjecentRooms.push_back(Rooms.at(y).at(diff).get());
 		}
 	}
-	if (y - 1 >= 0) {
-		if (Rooms.at(x).at(y - 1) != nullptr) {
-			AdjecentRooms.push_back(Rooms.at(x).at(y-1).get());
+	diff = y - 1;
+	if (diff >= 0) {
+		if (Rooms.at(diff).at(x) != nullptr) {
+			AdjecentRooms.push_back(Rooms.at(diff).at(x).get());
 		}
 	}
-	if (y + 1 <= Rooms.at(x).size() - 1) {
-		if (Rooms.at(x).at(y + 1) != nullptr) {
-			AdjecentRooms.push_back(Rooms.at(x).at(y + 1).get());
+	diff = y + 1;
+	if (diff <= Rooms.at(x).size() - 1) {
+		if (Rooms.at(diff).at(x) != nullptr) {
+			AdjecentRooms.push_back(Rooms.at(diff).at(x).get());
 		}
 	}
 	return AdjecentRooms;
