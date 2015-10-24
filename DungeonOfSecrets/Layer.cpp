@@ -4,9 +4,9 @@
 
 Layer::Layer(Difficulty difficulty)
 {
-	for (int x = 0;x < 5;x++) {
+	for (int y = 0;y < 5;y++) {
 		vector<unique_ptr<Room>> rooms;
-		for (int y = 0;y < 5;y++) {
+		for (int x = 0;x < 5;x++) {
 			rooms.push_back(unique_ptr<Room>(new Room{difficulty, x, y}));
 		}
 		Rooms.push_back(move(rooms));
@@ -33,7 +33,8 @@ void Layer::GenerateConnections(Room* room, vector<Room*> VisitedRooms) {
 	while (!AdjecentRooms.empty()) {
 		int IndexChosenNeighbor = Utility::GetInstance()->RandomNumber(0, AdjecentRooms.size() - 1);
 		Room* ChosenNeighbor = AdjecentRooms.at(IndexChosenNeighbor);
-
+		if (VisitedRooms.size() == Rooms.size())
+			return;
 		if (find(VisitedRooms.begin(), VisitedRooms.end(), ChosenNeighbor) == VisitedRooms.end()) {
 			LinkRooms(room, ChosenNeighbor);
 			VisitedRooms.push_back(room);

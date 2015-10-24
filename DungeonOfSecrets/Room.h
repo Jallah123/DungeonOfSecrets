@@ -18,8 +18,8 @@ public:
 	bool IsVisited() { return visited; };
 	bool IsDestroyed() { return destroyed; };
 	void AddDirection(Directions dir, Room* room) { AdjecentRooms[dir] = room; };
-	bool HasEastRoom() { return AdjecentRooms.find(Directions::East) == AdjecentRooms.end(); };
-	bool HasSouthRoom() { return AdjecentRooms.find(Directions::South) == AdjecentRooms.end(); };
+	bool HasEastRoom() { return AdjecentRooms.find(Directions::East) != AdjecentRooms.end(); };
+	bool HasSouthRoom() { return AdjecentRooms.find(Directions::South) != AdjecentRooms.end(); };
 	int GetX() { return x; }
 	int GetY() { return y; }
 	~Room();
