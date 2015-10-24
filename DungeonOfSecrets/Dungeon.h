@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include "Layer.h"
+#include "CommandEnum.h"
 
 class Dungeon
 {
@@ -10,6 +11,7 @@ public:
 	~Dungeon();
 	vector<unique_ptr<Layer>> Layers;
 private:
+	Layer* CurrentLayer{ nullptr };
 	bool running = true;
 	void Run();
 	void HandleInput(string input);

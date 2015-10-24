@@ -1,7 +1,7 @@
 #pragma once
 #include <map>
 
-static enum Commands {
+enum Commands {
 	go,
 	attack,
 	use,
@@ -13,17 +13,17 @@ static enum Commands {
 	load
 };
 
-static std::map<std::string, Commands> s_mapStringValues;
+static std::map<std::string, Commands> CommandsMap;
 
-void initialize() {
-	s_mapStringValues["go"] = go;
-	s_mapStringValues["attack"] = attack;
-	s_mapStringValues["use"] = use;
-	s_mapStringValues["spell"] = spell;
-	s_mapStringValues["map"] = lookatmap;
-	s_mapStringValues["bag"] = bag;
-	s_mapStringValues["inventory"] = bag;
-	s_mapStringValues["iamnotworthy"] = cheat;
-	s_mapStringValues["save"] = save;
-	s_mapStringValues["load"] = load;
+static void InitializeCommands() {
+	CommandsMap["go"] = go;
+	CommandsMap["attack"] = attack;
+	CommandsMap["use"] = use;
+	CommandsMap["spell"] = spell;
+	CommandsMap["map"] = lookatmap;
+	CommandsMap["bag"] = bag;
+	CommandsMap["inventory"] = bag;
+	CommandsMap["iamnotworthy"] = cheat;
+	CommandsMap["save"] = save;
+	CommandsMap["load"] = load;
 }

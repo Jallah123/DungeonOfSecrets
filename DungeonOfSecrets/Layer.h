@@ -2,6 +2,7 @@
 #include <vector>
 #include "Room.h"
 #include "DifficultyEnum.h"
+#include "DirectionsEnum.h"
 #include <memory>
 
 class Layer
@@ -11,6 +12,7 @@ public:
 	Layer(Difficulty difficulty);
 	void Print();
 	Directions GetDirectionToRoom(int currentX, int currentY, int destX, int destY);
+	Room* GetRoom(int x, int y) { return Rooms.at(y).at(x).get(); };
 	void SetLadderDownRoom(unique_ptr<Room> room) { LadderDownRoom = room.get(); };
 	int index = 0;
 	~Layer();

@@ -4,6 +4,7 @@
 #include "Item.h"
 #include "Weapon.h"
 #include "Armour.h"
+#include "Utility.h"
 
 using namespace std;
 
@@ -19,9 +20,14 @@ public:
 		XP = 0;
 		BaseAttack = 2;
 		BaseDefence = 1;
+		y = Utility::GetInstance()->RandomNumber(0, 4);
+		x = Utility::GetInstance()->RandomNumber(0, 4);
 	};
 	Character(string _Name, int _Level, int _HP, int _MP, int _XP, int _BaseAttack, int _BaseDefence) { Name = _Name; Level = _Level; HP = _HP; MP = _MP; XP = _XP; BaseAttack = _BaseAttack; BaseDefence = _BaseDefence; };
 	~Character();
+	void Move(int _X, int _Y) { x = _X; y = _Y; };
+	int GetX() { return x; };
+	int GetY() { return y; };
 	void Attack(Character& enemy) { enemy.Damage(BaseAttack + CurrentWeapon.GetDamage()); };
 	void UseItem(Item& item) { item.DoAction(); };
 	void LookAtMap();

@@ -106,7 +106,7 @@ void Layer::Print()
 		string line = "";
 		for each (auto& Room in RoomsRow)
 		{
-			if (Room.get() == LadderDownRoom) {
+			if (Room.get() == LadderDownRoom && Room.get()->IsVisited()) {
 				cout << "T";
 			}
 			else if (Room.get()->IsDestroyed()) {

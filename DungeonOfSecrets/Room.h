@@ -8,6 +8,7 @@
 #include "Character.h"
 #include "DirectionsEnum.h"
 #include "DifficultyEnum.h"
+#include <iostream>
 
 using namespace std;
 
@@ -20,8 +21,12 @@ public:
 	void AddDirection(Directions dir, Room* room) { AdjecentRooms[dir] = room; };
 	bool HasEastRoom() { return AdjecentRooms.find(Directions::East) != AdjecentRooms.end(); };
 	bool HasSouthRoom() { return AdjecentRooms.find(Directions::South) != AdjecentRooms.end(); };
+	bool HasWestRoom() { return AdjecentRooms.find(Directions::West) != AdjecentRooms.end(); };
+	bool HasNorthRoom() { return AdjecentRooms.find(Directions::North) != AdjecentRooms.end(); };
+	Room* GetRoomByDirection(Directions dir) { return AdjecentRooms[dir]; };
 	int GetX() { return x; }
 	int GetY() { return y; }
+	void Enter() { cout << Description << endl; visited = true; };
 	~Room();
 private:
 	string Description;
