@@ -34,6 +34,7 @@ public:
 	bool Attack(Character& enemy);
 	void AddXP(int _XP);
 	int GetLevel() { return Level; };
+	void DrainMP(int _MP) { MP -= _MP; if (MP < 0) MP = 0; };
 	void UseItem(Item& item) { item.DoAction(); };
 	void Print() { cout << Name << " HP:" << CurrentHP << " Level: " << Level << endl; };
 	void ShowBag();
@@ -41,6 +42,7 @@ public:
 	int GetCurrentHP() { return CurrentHP; };
 	int GetHP() { return HP; };
 	int GetMP() { return MP; };
+	int GetPerception() { return Perception; };
 	void EquipArmour(Armour& armour) { CurrentArmour = armour; };
 	void EquipWeapon(Weapon& weapon) { CurrentWeapon = weapon; };
 	string GetName() { return Name; };

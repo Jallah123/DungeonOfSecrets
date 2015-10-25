@@ -23,24 +23,14 @@ public:
 	bool HasSouthRoom() { return AdjecentRooms.find(Directions::South) != AdjecentRooms.end(); };
 	bool HasWestRoom() { return AdjecentRooms.find(Directions::West) != AdjecentRooms.end(); };
 	bool HasNorthRoom() { return AdjecentRooms.find(Directions::North) != AdjecentRooms.end(); };
+	void SetTrap(Trap _Trap) { Trap = _Trap; };
 	void AddEnemy(Character Enemy) { Enemies.push_back(Enemy); };
 	vector<Character>* GetEnemies() { return &Enemies; };
-	void PrintEnemies() {
-		int i = 0;
-		for each (Character enemy in Enemies)
-		{
-			cout << i++ << ". ";
-			enemy.Print();
-		}
-	};
-	Room* GetRoomByDirection(Directions dir) { 
-		if(AdjecentRooms.find(dir) != AdjecentRooms.end())
-			return AdjecentRooms.find(dir)->second; 
-		return nullptr;
-	};
+	void PrintEnemies();
+	Room* GetRoomByDirection(Directions dir);
 	int GetX() { return x; }
 	int GetY() { return y; }
-	void Enter() { cout << Description << endl; visited = true; };
+	void Enter(Character& Wizard);
 	~Room();
 private:
 	string Description;
@@ -48,7 +38,7 @@ private:
 	int y;
 	bool visited = false;
 	bool destroyed = false;
-	vector<Trap> Traps;
+	Trap Trap;
 	vector<Item> Items;
 	vector<Character> Enemies;
 	map<Directions, Room*> AdjecentRooms;

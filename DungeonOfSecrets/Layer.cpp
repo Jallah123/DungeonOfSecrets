@@ -1,6 +1,7 @@
 #include "Layer.h"
 #include "Utility.h"
 #include "CharacterFactory.h"
+#include "TrapFactory.h"
 #include <iostream>
 
 Layer::Layer(Difficulty difficulty)
@@ -25,6 +26,8 @@ void Layer::FillRooms(Difficulty difficulty)
 		{
 			for (int i = 0; i < Utility::GetInstance()->RandomNumber(0, 2); i++)
 				room.get()->AddEnemy(CharacterFactory::GetInstance()->GetCharacterByDifficulty(difficulty));
+			if (Utility::GetInstance()->RandomNumber(0, 10) > 1)
+				room.get()->SetTrap(TrapFactory::GetInstance()->GetRandomTrap());
 		}
 	}
 }

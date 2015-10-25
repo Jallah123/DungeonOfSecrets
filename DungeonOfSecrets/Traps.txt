@@ -1,6 +1,6 @@
-/Trap name HP MP
-boulder;40;0
-fire;60;0
-poison;30;50
-ebola;50;50
-unholy water;0;100
+/Trap name HP MP Perception
+boulder;40;0;1
+fire;60;0;2
+poison;30;50;3
+ebola;50;50;4
+unholy water;0;100;5

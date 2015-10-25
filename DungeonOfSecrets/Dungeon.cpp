@@ -10,7 +10,7 @@ Dungeon::Dungeon(string name)
 	Wizard = Character{name};
 	InitializeCommands();
 	InitializeDirections();
-	CurrentLayer->GetRoom(Wizard.GetX(), Wizard.GetY())->Enter();
+	CurrentLayer->GetRoom(Wizard.GetX(), Wizard.GetY())->Enter(Wizard);
 	Run();
 
 	//Layers.push_back(Layer{ Medium });
@@ -127,7 +127,7 @@ void Dungeon::Go(string Direction)
 	if (r->GetRoomByDirection(dir->second) != nullptr)
 	{
 		Wizard.Move(r->GetRoomByDirection(dir->second)->GetX(), r->GetRoomByDirection(dir->second)->GetY());
-		r->GetRoomByDirection(dir->second)->Enter();
+		r->GetRoomByDirection(dir->second)->Enter(Wizard);
 	}
 	else {
 		cout << "No room there" << endl;

@@ -10,11 +10,6 @@ CharacterFactory::CharacterFactory()
 	GenerateCharacters();
 }
 
-
-CharacterFactory::~CharacterFactory()
-{
-}
-
 CharacterFactory* CharacterFactory::instance{ nullptr }; // definition & init
 
 CharacterFactory* CharacterFactory::GetInstance() {
@@ -37,4 +32,8 @@ Character CharacterFactory::GetCharacterByDifficulty(Difficulty Difficulty)
 {
 	int index = Utility::GetInstance()->RandomNumber(Difficulty * 7, Difficulty+1 * 7);
 	return Characters.at(index);
+}
+
+CharacterFactory::~CharacterFactory()
+{
 }
