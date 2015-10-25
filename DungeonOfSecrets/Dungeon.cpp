@@ -1,6 +1,8 @@
 #include "Dungeon.h"
 #include "CharacterFactory.h"
 #include "Utility.h"
+#include <deque>
+#include <vector>
 #include <iostream>
 
 Dungeon::Dungeon(string name)
@@ -73,8 +75,83 @@ void Dungeon::HandleInput(string input)
 	case info:
 		ShowAllInfo();
 		break;
+	case talisman:
+		UseTalisman();
+		break;
+	case showmap:
+		RevealMap();
+		break;
 	default:
 		break;
+	}
+}
+
+void Dungeon::RevealMap()
+{
+	for each (auto& roomrow in CurrentLayer->GetRooms())
+	{
+		for each (auto& room in roomrow)
+		{
+			room.get()->SetVisited();
+		}
+	}
+}
+
+struct Node {
+	Room* Self;
+	Room* Parent;
+
+	Node() {};
+
+	Node(Room* _Self, Room* _Parent)
+	{
+		Self = _Self;
+		Parent = _Parent;
+	}
+};
+
+void Dungeon::UseTalisman()
+{
+	Room* CurrentRoom = GetCurrentRoom();
+
+	int distance = INFINITY;
+	deque<Room*> queue;
+	vector<Room*> visited;
+	vector<Node> list;
+	queue.push_back(CurrentRoom);
+
+	while (!queue.empty())
+	{
+		CurrentRoom = queue.front();
+		queue.pop_front();
+		visited.push_back(CurrentRoom);
+
+		if (CurrentRoom == CurrentLayer->GetLadderRoom())
+		{
+			Node n = list.back();
+			int index = 0;
+			while (n.Parent != GetCurrentRoom())
+			{
+				for each (Node node in list)
+				{
+					if (node.Self == n.Parent)
+						n = node;
+				}
+				cout << n.Self->GetX() << ":" << n.Self->GetY() << endl;
+				index++;
+			}
+			cout << "Total " << index << " steps till the ladder room." << endl;
+		}
+
+		map<Directions, Room*> AdjecentRooms = CurrentRoom->GetAdjecentRooms();
+		for each (pair<Directions, Room*> room in AdjecentRooms)
+		{
+			if (find(visited.begin(), visited.end(), room.second) == visited.end() && find(queue.begin(), queue.end(), room.second) == queue.end())
+			{
+				list.push_back(Node{ room.second, CurrentRoom });
+				queue.push_back(room.second);
+			}
+		}
 	}
 }
 

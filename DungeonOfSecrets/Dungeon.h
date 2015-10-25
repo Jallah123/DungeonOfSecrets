@@ -16,6 +16,8 @@ private:
 	void Run();
 	void Rest();
 	void ShowAllInfo();
+	void UseTalisman();
+	void RevealMap();
 	void HandleInput(string input);
 	void Go(string direction);
 	Character Wizard;

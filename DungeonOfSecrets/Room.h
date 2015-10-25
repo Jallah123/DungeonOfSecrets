@@ -23,6 +23,8 @@ public:
 	bool HasSouthRoom() { return AdjecentRooms.find(Directions::South) != AdjecentRooms.end(); };
 	bool HasWestRoom() { return AdjecentRooms.find(Directions::West) != AdjecentRooms.end(); };
 	bool HasNorthRoom() { return AdjecentRooms.find(Directions::North) != AdjecentRooms.end(); };
+	void SetVisited() { visited = true; };
+	map<Directions, Room*> GetAdjecentRooms() { return AdjecentRooms; };
 	void SetTrap(Trap _Trap) { Trap = _Trap; };
 	Enums::Difficulty GetDifficulty() { return Difficulty; };
 	void AddEnemy(Character Enemy) { Enemies.push_back(Enemy); };

@@ -15,6 +15,8 @@ public:
 	Room* GetRoom(int x, int y) { return Rooms.at(y).at(x).get(); };
 	void SetLadderDownRoom(unique_ptr<Room> room) { LadderDownRoom = room.get(); };
 	int index = 0;
+	Room* GetLadderRoom() { return LadderDownRoom; };
+	vector<vector<unique_ptr<Room>>>& GetRooms() { return Rooms; };
 	~Layer();
 private:
 	void FillRooms(Enums::Difficulty difficulty);
