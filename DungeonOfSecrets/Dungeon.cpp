@@ -20,18 +20,27 @@ Dungeon::Dungeon(string name)
 
 void Dungeon::Run() 
 {
+	system("cls");
 	while (running)
 	{
 		CurrentLayer->Print();
 		
 		GetCurrentRoom()->PrintEnemies();
-
-		cout << "Hello " << Wizard.GetName() << "," << endl << "Please enter what you would like to do." << endl << "- >";
+		ShowInfo();
+		
 		char command[100];
 		cin.getline(command, sizeof(command));
 		system("cls");
 		HandleInput(command);
+		EnemiesAttack();
 	}
+}
+
+void Dungeon::ShowInfo() {
+	cout << "Hello " << Wizard.GetName() << "," << endl;
+	cout << "You currently have [" << Wizard.GetCurrentHP() << "/" << Wizard.GetHP() << "] HP" << endl;
+	cout << "And you are level: " << Wizard.GetLevel() << endl;
+	cout << "Please enter what you would like to do." << endl << "- >";
 }
 
 void Dungeon::HandleInput(string input)
@@ -41,23 +50,59 @@ void Dungeon::HandleInput(string input)
 	size_t found = input.find(" ");
 	if(found != string::npos)
 		value = input.substr(input.find(' ') + 1, input.length() - 1);
-	switch (CommandsMap[command])
+	if (CommandsMap.find(command) == CommandsMap.end()) {
+		cout << "Not a valid command, type 'help' for al available commands." << endl;
+		return;
+	}
+	switch (CommandsMap.at(command))
 	{
 	case go:
 		Go(value);
 		break;
 	case attack:
-		AttackEnemies();
+		AttackEnemy(value);
+		break;
+	case help:
+		ShowHelp();
 		break;
 	default:
 		break;
 	}
 }
 
-void Dungeon::AttackEnemies()
+void Dungeon::ShowHelp() 
 {
-	for (int i = 0; i < GetCurrentRoom()->GetEnemies()->size(); i++)
-		Wizard.Attack(GetCurrentRoom()->GetEnemies()->at(i));
+	cout << "You can type any if these commands:" << endl;
+	for each (auto command in CommandsMap)
+	{
+		cout << command.first << ", ";
+	}
+	cout << endl;
+}
+
+void Dungeon::AttackEnemy(string index)
+{
+	if (index == "")
+		cout << "Correct usage : attack <number>" << endl;
+	int i;
+	try {
+		i = stoi(index);
+	}
+	catch (exception e) {
+		cout << "Not a valid number" << endl;
+		return;
+	}
+	vector<Character>* enemies = GetCurrentRoom()->GetEnemies();
+	if (!enemies->empty() && i <= enemies->size() && i >= 0) {
+		if (Wizard.Attack(enemies->at(i))) {
+			cout << "You killed " << enemies->at(i).GetName() << endl;
+			Wizard.AddXP(enemies->at(i).GetLevel());
+			GetCurrentRoom()->GetEnemies()->erase(enemies->begin() + i);
+		}
+	}
+	else {
+		cout << "No such enemy" << endl;
+	}
 }
 
 Room* Dungeon::GetCurrentRoom() 
@@ -70,7 +115,7 @@ void Dungeon::Go(string Direction)
 {
 	if (Direction == "")
 	{
-		cout << "Error using command Go usage: go <direction>";
+		cout << "Error using command Go usage: go <direction>" << endl;
 		return;
 	}
 	Room* r = GetCurrentRoom();
@@ -79,22 +124,21 @@ void Dungeon::Go(string Direction)
 		cout << "No such direction exists" << endl;
 		return;
 	}
-	switch (dir->second)
+	if (r->GetRoomByDirection(dir->second) != nullptr)
 	{
-	case North:
-	case South:
-	case West:
-	case Down:
-	case East:
-		if (r->GetRoomByDirection(dir->second) != nullptr)
-		{
-			Wizard.Move(r->GetRoomByDirection(dir->second)->GetX(), r->GetRoomByDirection(dir->second)->GetY());
-			r->GetRoomByDirection(dir->second)->Enter();
-		}
-		else {
-			cout << "No room" << endl;
-		}
-		break;
+		Wizard.Move(r->GetRoomByDirection(dir->second)->GetX(), r->GetRoomByDirection(dir->second)->GetY());
+		r->GetRoomByDirection(dir->second)->Enter();
+	}
+	else {
+		cout << "No room there" << endl;
+	}
+}
+
+void Dungeon::EnemiesAttack() {
+	vector<Character>* enemies = GetCurrentRoom()->GetEnemies();
+	for (int i = 0; i < enemies->size(); i++)
+	{
+		enemies->at(i).Attack(Wizard);
 	}
 }
 

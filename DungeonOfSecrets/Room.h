@@ -26,8 +26,10 @@ public:
 	void AddEnemy(Character Enemy) { Enemies.push_back(Enemy); };
 	vector<Character>* GetEnemies() { return &Enemies; };
 	void PrintEnemies() {
+		int i = 0;
 		for each (Character enemy in Enemies)
 		{
+			cout << i++ << ". ";
 			enemy.Print();
 		}
 	};
