@@ -129,7 +129,7 @@ void Dungeon::UseTalisman()
 		if (CurrentRoom == CurrentLayer->GetLadderRoom())
 		{
 			Node n = list.back();
-			int index = 0;
+			int index = 1;
 			while (n.Parent != GetCurrentRoom())
 			{
 				for each (Node node in list)
