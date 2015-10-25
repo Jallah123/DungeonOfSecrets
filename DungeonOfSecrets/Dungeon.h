@@ -14,6 +14,8 @@ private:
 	Layer* CurrentLayer{ nullptr };
 	bool running = true;
 	void Run();
+	void Rest();
+	void ShowAllInfo();
 	void HandleInput(string input);
 	void Go(string direction);
 	Character Wizard;

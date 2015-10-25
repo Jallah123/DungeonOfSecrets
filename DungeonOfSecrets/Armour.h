@@ -5,6 +5,7 @@ class Armour :
 {
 public:
 	Armour() { Defence = 0; };
+	int GetDefence() { return Defence; };
 	~Armour();
 private:
 	int Defence;

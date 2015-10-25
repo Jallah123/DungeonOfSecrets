@@ -15,7 +15,7 @@ using namespace std;
 class Room
 {
 public:
-	Room(Difficulty difficulty, int _x, int _y);
+	Room(Enums::Difficulty _Difficulty, int _x, int _y);
 	bool IsVisited() { return visited; };
 	bool IsDestroyed() { return destroyed; };
 	void AddDirection(Directions dir, Room* room) { AdjecentRooms[dir] = room; };
@@ -24,6 +24,7 @@ public:
 	bool HasWestRoom() { return AdjecentRooms.find(Directions::West) != AdjecentRooms.end(); };
 	bool HasNorthRoom() { return AdjecentRooms.find(Directions::North) != AdjecentRooms.end(); };
 	void SetTrap(Trap _Trap) { Trap = _Trap; };
+	Enums::Difficulty GetDifficulty() { return Difficulty; };
 	void AddEnemy(Character Enemy) { Enemies.push_back(Enemy); };
 	vector<Character>* GetEnemies() { return &Enemies; };
 	void PrintEnemies();
@@ -34,6 +35,7 @@ public:
 	~Room();
 private:
 	string Description;
+	Enums::Difficulty Difficulty;
 	int x;
 	int y;
 	bool visited = false;

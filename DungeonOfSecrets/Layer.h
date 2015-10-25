@@ -9,7 +9,7 @@ class Layer
 {
 public:
 	Layer();
-	Layer(Difficulty difficulty);
+	Layer(Enums::Difficulty difficulty);
 	void Print();
 	Directions GetDirectionToRoom(int currentX, int currentY, int destX, int destY);
 	Room* GetRoom(int x, int y) { return Rooms.at(y).at(x).get(); };
@@ -17,7 +17,7 @@ public:
 	int index = 0;
 	~Layer();
 private:
-	void FillRooms(Difficulty difficulty);
+	void FillRooms(Enums::Difficulty difficulty);
 	vector<Room*> GetAdjecentRooms(int x, int y);
 	vector<vector<unique_ptr<Room>>> Rooms;
 	void GenerateConnections();

@@ -11,7 +11,9 @@ enum Commands {
 	cheat,
 	save,
 	load,
-	help
+	help,
+	rest,
+	info
 };
 
 static std::map<std::string, Commands> CommandsMap;
@@ -28,4 +30,6 @@ static void InitializeCommands() {
 	CommandsMap["save"] = save;
 	CommandsMap["load"] = load;
 	CommandsMap["help"] = help;
+	CommandsMap["rest"] = rest;
+	CommandsMap["info"] = info;
 }

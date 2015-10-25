@@ -31,9 +31,14 @@ public:
 	void Move(int _X, int _Y) { x = _X; y = _Y; };
 	int GetX() { return x; };
 	int GetY() { return y; };
+	int GetBaseAttack() { return BaseAttack; };
+	int GetBaseDefence() { return BaseDefence; };
+	Weapon GetWeapon() { return CurrentWeapon; };
+	Armour GetArmour() { return CurrentArmour; };
 	bool Attack(Character& enemy);
 	void AddXP(int _XP);
 	int GetLevel() { return Level; };
+	void Heal(int _HP) { CurrentHP += _HP; if (CurrentHP > HP) CurrentHP = HP; };
 	void DrainMP(int _MP) { MP -= _MP; if (MP < 0) MP = 0; };
 	void UseItem(Item& item) { item.DoAction(); };
 	void Print() { cout << Name << " HP:" << CurrentHP << " Level: " << Level << endl; };

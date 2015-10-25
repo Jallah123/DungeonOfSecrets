@@ -1,9 +1,11 @@
 #include "Dungeon.h"
+#include "CharacterFactory.h"
+#include "Utility.h"
 #include <iostream>
 
 Dungeon::Dungeon(string name)
 {
-	unique_ptr<Layer>firstLayer (new Layer{ Easy });
+	unique_ptr<Layer>firstLayer (new Layer{ Enums::Easy });
 	// firstLayer.get()->SetLadderDownRoom(nullptr);
 	CurrentLayer = firstLayer.get();
 	Layers.push_back(move(firstLayer));
@@ -39,7 +41,7 @@ void Dungeon::Run()
 void Dungeon::ShowInfo() {
 	cout << "Hello " << Wizard.GetName() << "," << endl;
 	cout << "You currently have [" << Wizard.GetCurrentHP() << "/" << Wizard.GetHP() << "] HP" << endl;
-	cout << "And you are level: " << Wizard.GetLevel() << endl;
+	cout << "You currently have " << Wizard.GetMP() << " MP" << endl;
 	cout << "Please enter what you would like to do." << endl << "- >";
 }
 
@@ -65,8 +67,43 @@ void Dungeon::HandleInput(string input)
 	case help:
 		ShowHelp();
 		break;
+	case rest:
+		Rest();
+		break;
+	case info:
+		ShowAllInfo();
+		break;
 	default:
 		break;
+	}
+}
+
+void Dungeon::ShowAllInfo() 
+{
+	cout << "Level: " << Wizard.GetLevel() << endl;
+	cout << "Perception: " << Wizard.GetPerception() << "\t";
+	cout << "BaseAttack: " << Wizard.GetBaseAttack() << "\t";
+	cout << "BaseDefence: " << Wizard.GetBaseDefence() << endl;
+	if (Wizard.GetWeapon().GetName() != "")
+	{
+		cout << "Weapon: " << Wizard.GetWeapon().GetName() << " " << Wizard.GetWeapon().GetDescription() << ". Damage: " << Wizard.GetWeapon().GetDamage() << endl;
+		cout << "Weapon: " << Wizard.GetArmour().GetName() << " " << Wizard.GetArmour().GetDescription() << ". Damage: " << Wizard.GetArmour().GetDefence() << endl;
+	}
+}
+
+void Dungeon::Rest()
+{
+	if (Wizard.GetCurrentHP() == Wizard.GetHP()) 
+	{
+		cout << "You already have full health." << endl;
+		return;
+	}
+	
+	Wizard.Heal(Wizard.GetLevel() * 10);
+	Room* CurrentRoom = GetCurrentRoom();
+	if (Utility::GetInstance()->RandomNumber(0, 9) == 0) 
+	{
+		CurrentRoom->AddEnemy(CharacterFactory::GetInstance()->GetCharacterByDifficulty(CurrentRoom->GetDifficulty()));
 	}
 }
 

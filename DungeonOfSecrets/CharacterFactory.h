@@ -11,7 +11,7 @@ public:
 	static CharacterFactory* GetInstance();
 	void GenerateCharacters();
 	vector<Character> Characters{};
-	Character GetCharacterByDifficulty(Difficulty Difficulty);
+	Character GetCharacterByDifficulty(Enums::Difficulty Difficulty);
 private:
 	CharacterFactory();
 	~CharacterFactory();

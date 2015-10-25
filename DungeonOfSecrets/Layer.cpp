@@ -4,7 +4,7 @@
 #include "TrapFactory.h"
 #include <iostream>
 
-Layer::Layer(Difficulty difficulty)
+Layer::Layer(Enums::Difficulty difficulty)
 {
 	for (int y = 0;y < 5;y++) {
 		vector<unique_ptr<Room>> rooms;
@@ -18,7 +18,7 @@ Layer::Layer(Difficulty difficulty)
 	FillRooms(difficulty);
 }
 
-void Layer::FillRooms(Difficulty difficulty)
+void Layer::FillRooms(Enums::Difficulty difficulty)
 {
 	for each (auto& roomrow in Rooms)
 	{

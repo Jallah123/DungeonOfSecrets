@@ -1,7 +1,9 @@
 #pragma once
-enum Difficulty {
-	Easy,
-	Medium,
-	Hard,
-	Boss
-};
+namespace Enums {
+	enum Difficulty {
+		Easy,
+		Medium,
+		Hard,
+		Boss
+	};
+}

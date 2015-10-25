@@ -28,7 +28,7 @@ void CharacterFactory::GenerateCharacters()
 	}
 }
 
-Character CharacterFactory::GetCharacterByDifficulty(Difficulty Difficulty)
+Character CharacterFactory::GetCharacterByDifficulty(Enums::Difficulty Difficulty)
 {
 	int index = Utility::GetInstance()->RandomNumber(Difficulty * 7, Difficulty+1 * 7);
 	return Characters.at(index);
