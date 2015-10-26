@@ -113,8 +113,10 @@ struct Node {
 void Dungeon::UseTalisman()
 {
 	Room* CurrentRoom = GetCurrentRoom();
-
-	int distance = INFINITY;
+	if (CurrentRoom == CurrentLayer->GetLadderRoom()) {
+		cout << "You are already in the ladderroom." << endl;
+		return;
+	}
 	deque<Room*> queue;
 	vector<Room*> visited;
 	vector<Node> list;
@@ -122,8 +124,8 @@ void Dungeon::UseTalisman()
 
 	while (!queue.empty())
 	{
-		CurrentRoom = queue.front();
-		queue.pop_front();
+		CurrentRoom = queue.back();
+		queue.pop_back();
 		visited.push_back(CurrentRoom);
 
 		if (CurrentRoom == CurrentLayer->GetLadderRoom())
@@ -134,10 +136,11 @@ void Dungeon::UseTalisman()
 			{
 				for each (Node node in list)
 				{
-					if (node.Self == n.Parent)
+					if (node.Self == n.Parent) {
 						n = node;
+					}
 				}
-				cout << n.Self->GetX() << ":" << n.Self->GetY() << endl;
+				cout << n.Self->GetX()+1 << ":" << n.Self->GetY()+1 << endl;
 				index++;
 			}
 			cout << "Total " << index << " steps till the ladder room." << endl;
@@ -148,7 +151,7 @@ void Dungeon::UseTalisman()
 		{
 			if (find(visited.begin(), visited.end(), room.second) == visited.end() && find(queue.begin(), queue.end(), room.second) == queue.end())
 			{
-				list.push_back(Node{ room.second, CurrentRoom });
+				list.push_back(Node{ room.second, CurrentRoom});
 				queue.push_back(room.second);
 			}
 		}
