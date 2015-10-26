@@ -6,13 +6,12 @@ using namespace std;
 class Item
 {
 public:
-	Item();
+	Item() { Name = ""; };
+	Item(string _Name) { Name = _Name; };
 	~Item();
 	string GetName() { return Name; };
-	string GetDescription() { return Description; };
 	virtual void DoAction() = 0;
 private:
 	string Name;
-	string Description;
 };
 

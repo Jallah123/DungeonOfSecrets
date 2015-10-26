@@ -4,7 +4,8 @@ class Weapon :
 	public Item
 {
 public:
-	Weapon() { Damage = 0; };
+	Weapon() {};
+	Weapon(string _Name, int _Damage) : Item(_Name) { Damage = _Damage; };
 	~Weapon();
 	int GetDamage() { return Damage; };
 private:

@@ -267,8 +267,8 @@ void Dungeon::ShowAllInfo()
 	cout << "BaseDefence: " << Wizard.GetBaseDefence() << endl;
 	if (Wizard.GetWeapon().GetName() != "")
 	{
-		cout << "Weapon: " << Wizard.GetWeapon().GetName() << " " << Wizard.GetWeapon().GetDescription() << ". Damage: " << Wizard.GetWeapon().GetDamage() << endl;
-		cout << "Weapon: " << Wizard.GetArmour().GetName() << " " << Wizard.GetArmour().GetDescription() << ". Damage: " << Wizard.GetArmour().GetDefence() << endl;
+		cout << "Weapon: " << Wizard.GetWeapon().GetName() << ". Damage: " << Wizard.GetWeapon().GetDamage() << endl;
+		cout << "Weapon: " << Wizard.GetArmour().GetName() << ". Damage: " << Wizard.GetArmour().GetDefence() << endl;
 	}
 }
 
