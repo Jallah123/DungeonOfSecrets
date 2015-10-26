@@ -17,3 +17,13 @@ static void InitializeDirections() {
 	DirectionsMap["west"] = West;
 	DirectionsMap["down"] = Down;
 }
+
+static std::map<Directions, std::string> StringMap;
+
+static void InitializeStrings() {
+	StringMap[North] = "North";
+	StringMap[East] = "East";
+	StringMap[South] = "South";
+	StringMap[West] = "West";
+	StringMap[Down] = "Down";
+}

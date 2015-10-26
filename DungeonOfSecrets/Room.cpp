@@ -41,6 +41,29 @@ Room* Room::GetRoomByDirection(Directions dir)
 	return nullptr;
 }
 
+int Room::GetWeigth()
+{
+	int weight = 0;
+	if (Trap.GetPerceptionNeeded() >= 0) {
+		weight += 2;
+	}
+	for each (auto enemy in Enemies)
+	{
+		weight += enemy.GetLevel();
+	}
+	return weight;
+}
+
+Directions Room::GetDirectionByRoom(Room* room) 
+{
+	for each (pair<Directions, Room*> var in AdjecentRooms)
+	{
+		if (var.second == room) {
+			return var.first;
+		}
+	}
+}
+
 Room::~Room()
 {
 }

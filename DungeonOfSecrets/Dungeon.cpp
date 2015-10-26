@@ -4,16 +4,18 @@
 #include <deque>
 #include <vector>
 #include <iostream>
+#include <limits>
 
 Dungeon::Dungeon(string name)
 {
-	unique_ptr<Layer>firstLayer (new Layer{ Enums::Easy });
+	unique_ptr<Layer>firstLayer(new Layer{ Enums::Easy });
 	// firstLayer.get()->SetLadderDownRoom(nullptr);
 	CurrentLayer = firstLayer.get();
 	Layers.push_back(move(firstLayer));
-	Wizard = Character{name};
+	Wizard = Character{ name };
 	InitializeCommands();
 	InitializeDirections();
+	InitializeStrings();
 	CurrentLayer->GetRoom(Wizard.GetX(), Wizard.GetY())->Enter(Wizard);
 	Run();
 
@@ -22,16 +24,16 @@ Dungeon::Dungeon(string name)
 	//Layers.push_back(Layer{ Boss });
 }
 
-void Dungeon::Run() 
+void Dungeon::Run()
 {
 	system("cls");
 	while (running)
 	{
 		CurrentLayer->Print();
-		
+
 		GetCurrentRoom()->PrintEnemies();
 		ShowInfo();
-		
+
 		char command[100];
 		cin.getline(command, sizeof(command));
 		system("cls");
@@ -52,7 +54,7 @@ void Dungeon::HandleInput(string input)
 	string command = input.substr(0, input.find(' '));
 	string value = "";
 	size_t found = input.find(" ");
-	if(found != string::npos)
+	if (found != string::npos)
 		value = input.substr(input.find(' ') + 1, input.length() - 1);
 	if (CommandsMap.find(command) == CommandsMap.end()) {
 		cout << "Not a valid command, type 'help' for al available commands." << endl;
@@ -81,6 +83,15 @@ void Dungeon::HandleInput(string input)
 	case showmap:
 		RevealMap();
 		break;
+	case compass:
+		UseCompass();
+		break;
+	case openmap:
+		OpenMap();
+		break;
+	case spawnsuperboss:
+		SpawnSuperBoss(value);
+		break;
 	default:
 		break;
 	}
@@ -97,21 +108,111 @@ void Dungeon::RevealMap()
 	}
 }
 
-struct Node {
-	Room* Self;
-	Room* Parent;
-
-	Node() {};
-
-	Node(Room* _Self, Room* _Parent)
+void Dungeon::OpenMap()
+{
+	for each (auto& roomrow in CurrentLayer->GetRooms())
 	{
-		Self = _Self;
-		Parent = _Parent;
+		for each (auto& room in roomrow)
+		{
+			vector<vector<unique_ptr<Room>>>& rooms = CurrentLayer->GetRooms();
+
+			if ((room.get()->GetY() - 1) >= 0) {
+				room.get()->AddDirection(Directions::North, rooms.at(room.get()->GetY() - 1).at(room.get()->GetX()).get());
+			}
+			if (room.get()->GetX() + 1 < rooms.at(room.get()->GetY()).size()) {
+				room.get()->AddDirection(Directions::East, rooms.at(room.get()->GetY()).at(room.get()->GetX() + 1).get());
+			}
+			if (room.get()->GetY() + 1 < rooms.size()) {
+				room.get()->AddDirection(Directions::South, rooms.at(room.get()->GetY() + 1).at(room.get()->GetX()).get());
+			}
+			if (room.get()->GetX() - 1 >= 0) {
+				room.get()->AddDirection(Directions::West, rooms.at(room.get()->GetY()).at(room.get()->GetX() - 1).get());
+			}
+		}
 	}
-};
+}
+
+void Dungeon::SpawnSuperBoss(string value)
+{
+	size_t t = value.find(":");
+	int x;
+	int y;
+	try {
+		x = stoi(value.substr(0, t ));
+		y = stoi(value.substr(t + 1, value.length() - 1));
+	}
+	catch (exception e) {
+
+	}
+	CurrentLayer->GetRoom(x-1, y-1)->AddEnemy(Character{ "Super Boss", 999999, 999999, 999999 , 999999 , 999999 ,999999 });
+}
+
+void Dungeon::UseCompass() {
+	Dijkstra();
+	Room* target = CurrentLayer->GetLadderRoom();
+	vector<Room*> path;
+	for (Room* room = target; room != nullptr; room = room->GetPreviousRoom()) {
+		path.push_back(room);
+	}
+	reverse(path.begin(), path.end());
+
+	// Print path
+	int index = 0;
+	while (index < path.size() - 1)
+	{
+		cout << StringMap.at(path.at(index)->GetDirectionByRoom(path.at(index + 1))) << " ";
+		index++;
+	}
+	cout << endl;
+}
+
+void Dungeon::Dijkstra() {
+	vector<vector<unique_ptr<Room>>>& rooms = CurrentLayer->GetRooms();
+	for each (auto& roomrow in rooms)
+	{
+		for each (auto& room in roomrow)
+		{
+			room.get()->SetDistance(numeric_limits<int>::max());
+			room.get()->SetPreviousRoom(nullptr);
+		}
+	}
+	GetCurrentRoom()->SetDistance(0);
+	deque<Room*> queue;
+	queue.push_back(GetCurrentRoom());
+
+	while (!queue.empty()) {
+		Room* room = queue.front();
+		queue.pop_front();
+		for each (auto& AdjecentRoom in room->GetAdjecentRooms())
+		{
+
+			int weight = AdjecentRoom.second->GetWeigth();
+			int distance = room->GetDistance() + weight;
+
+			if (distance < AdjecentRoom.second->GetDistance()) {
+				AdjecentRoom.second->SetDistance(distance);
+				AdjecentRoom.second->SetPreviousRoom(room);
+				queue.push_back(AdjecentRoom.second);
+			}
+		}
+	}
+}
 
 void Dungeon::UseTalisman()
 {
+	struct Node {
+		Room* Self;
+		Room* Parent;
+
+		Node() {};
+
+		Node(Room* _Self, Room* _Parent)
+		{
+			Self = _Self;
+			Parent = _Parent;
+		}
+	};
+
 	Room* CurrentRoom = GetCurrentRoom();
 	if (CurrentRoom == CurrentLayer->GetLadderRoom()) {
 		cout << "You are already in the ladderroom." << endl;
@@ -140,7 +241,7 @@ void Dungeon::UseTalisman()
 						n = node;
 					}
 				}
-				cout << n.Self->GetX()+1 << ":" << n.Self->GetY()+1 << endl;
+				cout << n.Self->GetX() + 1 << ":" << n.Self->GetY() + 1 << endl;
 				index++;
 			}
 			cout << "Total " << index << " steps till the ladder room." << endl;
@@ -151,14 +252,14 @@ void Dungeon::UseTalisman()
 		{
 			if (find(visited.begin(), visited.end(), room.second) == visited.end() && find(queue.begin(), queue.end(), room.second) == queue.end())
 			{
-				list.push_back(Node{ room.second, CurrentRoom});
+				list.push_back(Node{ room.second, CurrentRoom });
 				queue.push_back(room.second);
 			}
 		}
 	}
 }
 
-void Dungeon::ShowAllInfo() 
+void Dungeon::ShowAllInfo()
 {
 	cout << "Level: " << Wizard.GetLevel() << endl;
 	cout << "Perception: " << Wizard.GetPerception() << "\t";
@@ -173,21 +274,21 @@ void Dungeon::ShowAllInfo()
 
 void Dungeon::Rest()
 {
-	if (Wizard.GetCurrentHP() == Wizard.GetHP()) 
+	if (Wizard.GetCurrentHP() == Wizard.GetHP())
 	{
 		cout << "You already have full health." << endl;
 		return;
 	}
-	
+
 	Wizard.Heal(Wizard.GetLevel() * 10);
 	Room* CurrentRoom = GetCurrentRoom();
-	if (Utility::GetInstance()->RandomNumber(0, 9) == 0) 
+	if (Utility::GetInstance()->RandomNumber(0, 9) == 0)
 	{
 		CurrentRoom->AddEnemy(CharacterFactory::GetInstance()->GetCharacterByDifficulty(CurrentRoom->GetDifficulty()));
 	}
 }
 
-void Dungeon::ShowHelp() 
+void Dungeon::ShowHelp()
 {
 	cout << "You can type any if these commands:" << endl;
 	for each (auto command in CommandsMap)
@@ -222,7 +323,7 @@ void Dungeon::AttackEnemy(string index)
 	}
 }
 
-Room* Dungeon::GetCurrentRoom() 
+Room* Dungeon::GetCurrentRoom()
 {
 	return 	CurrentLayer->GetRoom(Wizard.GetX(), Wizard.GetY());
 }

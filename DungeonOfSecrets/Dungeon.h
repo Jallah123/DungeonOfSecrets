@@ -26,5 +26,9 @@ private:
 	void ShowHelp();
 	void EnemiesAttack();
 	void ShowInfo();
+	void UseCompass();
+	void Dijkstra();
+	void OpenMap();
+	void SpawnSuperBoss(string value);
 };
 

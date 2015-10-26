@@ -31,11 +31,19 @@ public:
 	vector<Character>* GetEnemies() { return &Enemies; };
 	void PrintEnemies();
 	Room* GetRoomByDirection(Directions dir);
+	Directions GetDirectionByRoom(Room* room);
 	int GetX() { return x; }
 	int GetY() { return y; }
 	void Enter(Character& Wizard);
+	int GetWeigth();
+	int GetDistance() { return Distance; };
+	Room* GetPreviousRoom() { return PreviousRoom; };
+	void SetPreviousRoom(Room* _PreviousRoom) { PreviousRoom = _PreviousRoom; };
+	void SetDistance(int _Distance) { Distance = _Distance; };
 	~Room();
 private:
+	int Distance = INFINITY;
+	Room* PreviousRoom{ nullptr };
 	string Description;
 	Enums::Difficulty Difficulty;
 	int x;
