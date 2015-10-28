@@ -20,6 +20,7 @@ enum Commands {
 	compass,
 	spawnsuperboss,
 	pickup,
+	grenade
 };
 
 static std::map<std::string, Commands> CommandsMap;
@@ -44,4 +45,5 @@ static void InitializeCommands() {
 	CommandsMap["openmap"] = openmap;
 	CommandsMap["spawnsuperboss"] = spawnsuperboss;
 	CommandsMap["pickup"] = pickup;
+	CommandsMap["grenade"] = grenade;
 }

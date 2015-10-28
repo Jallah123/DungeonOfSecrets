@@ -10,7 +10,7 @@ Layer::Layer(Enums::Difficulty difficulty)
 	for (int y = 0;y < 5;y++) {
 		vector<unique_ptr<Room>> rooms;
 		for (int x = 0;x < 5;x++) {
-			rooms.push_back(unique_ptr<Room>(new Room{difficulty, x, y}));
+			rooms.push_back(unique_ptr<Room>(new Room{ difficulty, x, y }));
 		}
 		Rooms.push_back(move(rooms));
 	}
@@ -35,7 +35,7 @@ void Layer::FillRooms(Enums::Difficulty difficulty)
 	}
 }
 
-void Layer::GenerateConnections() 
+void Layer::GenerateConnections()
 {
 	vector<Room*> VisitedRooms;
 	Utility* util = Utility::GetInstance();
@@ -61,7 +61,7 @@ vector<Room*> Layer::GenerateConnections(Room* room, vector<Room*> VisitedRooms)
 			LinkRooms(room, ChosenNeighbor);
 			VisitedRooms = GenerateConnections(ChosenNeighbor, VisitedRooms);
 		}
-		else 
+		else
 		{
 			AdjecentRooms.erase(AdjecentRooms.begin() + IndexChosenNeighbor);
 		}
@@ -71,13 +71,13 @@ vector<Room*> Layer::GenerateConnections(Room* room, vector<Room*> VisitedRooms)
 
 void Layer::LinkRooms(Room* room1, Room* room2)
 {
-	Directions dir = GetDirectionToRoom(room1->GetX(), room1->GetY() , room2->GetX(), room2->GetY());
+	Directions dir = GetDirectionToRoom(room1->GetX(), room1->GetY(), room2->GetX(), room2->GetY());
 	room1->AddDirection(dir, room2);
 	dir = GetDirectionToRoom(room2->GetX(), room2->GetY(), room1->GetX(), room1->GetY());
 	room2->AddDirection(dir, room1);
 }
 
-Directions Layer::GetDirectionToRoom(int currentX, int currentY, int destX, int destY) 
+Directions Layer::GetDirectionToRoom(int currentX, int currentY, int destX, int destY)
 {
 	if (currentX < destX)
 		return Directions::East;
@@ -89,7 +89,7 @@ Directions Layer::GetDirectionToRoom(int currentX, int currentY, int destX, int 
 		return Directions::North;
 }
 
-vector<Room*> Layer::GetAdjecentRooms(int x, int y) 
+vector<Room*> Layer::GetAdjecentRooms(int x, int y)
 {
 	vector<Room*> AdjecentRooms;
 	int diff = x - 1;
@@ -119,7 +119,7 @@ vector<Room*> Layer::GetAdjecentRooms(int x, int y)
 	return AdjecentRooms;
 }
 
-void Layer::Print() 
+void Layer::Print()
 {
 	for each (auto& RoomsRow in Rooms)
 	{
@@ -129,9 +129,6 @@ void Layer::Print()
 			if (Room.get() == LadderDownRoom && Room.get()->IsVisited()) {
 				cout << "T";
 			}
-			else if (Room.get()->IsDestroyed()) {
-				cout << "~";
-			}
 			else if (Room.get()->IsVisited()) {
 				cout << "N";
 			}
@@ -139,21 +136,34 @@ void Layer::Print()
 				cout << "O";
 			}
 
-			if (Room.get()->HasEastRoom())
-				cout << "-";
-			else 
+			if (Room.get()->HasEastRoom()) {
+				if (Room.get()->DirectionDestroyed(Directions::East)) {
+					cout << "~";
+				}
+				else {
+					cout << "-";
+				}
+			}
+			else {
 				cout << " ";
-
-			if (Room.get()->HasSouthRoom())
-				line += "l ";
-			else
+			}
+			if (Room.get()->HasSouthRoom()) {
+				if (Room.get()->DirectionDestroyed(Directions::South)) {
+					line += "~ ";
+				}
+				else {
+					line += "l ";
+				}
+			}
+			else {
 				line += "  ";
+			}
 		}
 		cout << endl << line << endl;
 	}
 }
 
-Layer::Layer() 
+Layer::Layer()
 {
 
 }

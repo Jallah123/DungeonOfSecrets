@@ -28,6 +28,7 @@ private:
 	void ShowInfo();
 	void UseCompass();
 	void Dijkstra();
+	void SpanningTree();
 	void OpenMap();
 	void SpawnSuperBoss(string value);
 	void Look();
@@ -35,5 +36,6 @@ private:
 	void UseItem(string value);
 	void Save();
 	void Load();
+	bool Exists(vector<pair<Room*, Directions>>& Edges, Room* Room);
 };
 

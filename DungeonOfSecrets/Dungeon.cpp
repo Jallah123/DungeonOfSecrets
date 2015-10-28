@@ -7,6 +7,7 @@
 #include <fstream>
 #include <limits>
 #include "ItemFactory.h"
+#include <algorithm>
 
 Dungeon::Dungeon(string name)
 {
@@ -110,6 +111,9 @@ void Dungeon::HandleInput(string input)
 		break;
 	case load:
 		Load();
+		break;
+	case grenade:
+		SpanningTree();
 		break;
 	default:
 		break;
@@ -216,6 +220,64 @@ void Dungeon::UseCompass() {
 		index++;
 	}
 	cout << endl;
+}
+
+void Dungeon::SpanningTree() {
+	vector<pair<Room*, Directions>> Edges;
+	Room* currentRoom = GetCurrentRoom();
+	Directions currentRoomMinimumWeightDirection;
+	int currentRoomMinimumWeight = numeric_limits<int>::max();
+	for (auto room : currentRoom->GetAdjecentRooms()) {
+		if (room.second->GetWeigth() < currentRoomMinimumWeight) {
+			currentRoomMinimumWeight = room.second->GetWeigth();
+			currentRoomMinimumWeightDirection = room.first;
+		}
+	}
+	Edges.push_back(make_pair(currentRoom, currentRoomMinimumWeightDirection));
+
+	while (Edges.size() < (CurrentLayer->GetRooms().size() * CurrentLayer->GetRooms().size())) {
+		Directions minimumWeightDirection;
+		int minimumWeight = numeric_limits<int>::max();
+		for (auto& room : Edges) {
+			for (auto& adjecentRoom : room.first->GetAdjecentRooms()) {
+				bool exists = Exists(Edges, adjecentRoom.second);
+				if (adjecentRoom.second->GetWeigth() < minimumWeight && !exists) {
+					minimumWeight = adjecentRoom.second->GetWeigth();
+					minimumWeightDirection = room.first->GetDirectionByRoom(adjecentRoom.second);
+					currentRoom = adjecentRoom.second;
+				}
+			}
+		}
+		Edges.push_back(make_pair(currentRoom, minimumWeightDirection));
+	}
+	for each (auto& roomrow in CurrentLayer->GetRooms())
+	{
+		for each (auto& room in roomrow)
+		{
+			for each (auto& adjecentRoom in room->GetAdjecentRooms())
+			{
+				Directions dir = room.get()->GetDirectionByRoom(adjecentRoom.second);
+				for each (auto& edges in Edges)
+				{
+					if (edges.first == adjecentRoom.second && edges.second == dir) {
+						adjecentRoom.second->DestroyEdge(dir);
+					}
+					else {
+
+					}
+				}
+			}
+		}
+	}
+}
+
+bool Dungeon::Exists(vector<pair<Room*, Directions>>& Edges, Room* Room) {
+	for (auto& pair : Edges) {
+		if (pair.first == Room) {
+			return true;
+		}
+	}
+	return false;
 }
 
 void Dungeon::Dijkstra() {
@@ -398,8 +460,13 @@ void Dungeon::Go(string Direction)
 	}
 	if (r->GetRoomByDirection(dir->second) != nullptr)
 	{
-		Wizard.Move(r->GetRoomByDirection(dir->second)->GetX(), r->GetRoomByDirection(dir->second)->GetY());
-		r->GetRoomByDirection(dir->second)->Enter(Wizard);
+		if (!r->DirectionDestroyed(dir->second)) {
+			Wizard.Move(r->GetRoomByDirection(dir->second)->GetX(), r->GetRoomByDirection(dir->second)->GetY());
+			r->GetRoomByDirection(dir->second)->Enter(Wizard);
+		}
+		else {
+			cout << "This passage has been destroyed." << endl;
+		}
 	}
 	else {
 		cout << "No room there" << endl;

@@ -17,14 +17,16 @@ class Room
 public:
 	Room(Enums::Difficulty _Difficulty, int _x, int _y);
 	bool IsVisited() { return visited; };
-	bool IsDestroyed() { return destroyed; };
-	void AddDirection(Directions dir, Room* room) { AdjecentRooms[dir] = room; };
+	void AddDirection(Directions dir, Room* room) { AdjecentRooms[dir] = room; AdjecentRoomsEdges[dir] = false; };
 	bool HasEastRoom() { return AdjecentRooms.find(Directions::East) != AdjecentRooms.end(); };
 	bool HasSouthRoom() { return AdjecentRooms.find(Directions::South) != AdjecentRooms.end(); };
 	bool HasWestRoom() { return AdjecentRooms.find(Directions::West) != AdjecentRooms.end(); };
 	bool HasNorthRoom() { return AdjecentRooms.find(Directions::North) != AdjecentRooms.end(); };
 	void SetVisited() { visited = true; };
 	map<Directions, Room*> GetAdjecentRooms() { return AdjecentRooms; };
+	map<Directions, bool> GetAdjecentRoomsEdges() { return AdjecentRoomsEdges; };
+	void DestroyEdge(Directions dir) { AdjecentRoomsEdges[dir] = true; };
+	bool DirectionDestroyed(Directions dir) { return AdjecentRoomsEdges[dir]; };
 	void SetTrap(Trap _Trap) { Trap = _Trap; };
 	Enums::Difficulty GetDifficulty() { return Difficulty; };
 	void AddEnemy(Character Enemy) { Enemies.push_back(Enemy); };
@@ -53,10 +55,10 @@ private:
 	int x;
 	int y;
 	bool visited = false;
-	bool destroyed = false;
 	Trap Trap;
 	vector<Item*> Items;
 	vector<Character> Enemies;
 	map<Directions, Room*> AdjecentRooms;
+	map<Directions, bool> AdjecentRoomsEdges;
 };
 
