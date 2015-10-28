@@ -8,11 +8,13 @@ class ItemFactory
 {
 public:
 	static ItemFactory* GetInstance();
-	void GenerateItems();
 	Item* GetRandomItem();
+	int GetIndexFromItem(Item* item);
+	Item* GetItemFromIndex(int index);
 private:
 	ItemFactory();
 	~ItemFactory();
+	void GenerateItems();
 	static ItemFactory* instance;
 	vector<Item*> Items;
 };

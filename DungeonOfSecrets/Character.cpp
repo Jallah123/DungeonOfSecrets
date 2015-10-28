@@ -2,6 +2,8 @@
 #include "HPPotion.h"
 #include "MPPotion.h"
 #include "HMPPotion.h"
+#include "ItemFactory.h"
+#include "Parser.h"
 #include <iostream>
 
 Character::~Character()
@@ -76,14 +78,30 @@ bool Character::Damage(int dmg) {
 	return false;
 }
 
-void Character::AddXP(int _XP) {
+string Character::GetSaveString()
+{
+	ItemFactory* ItemFactory = ItemFactory::GetInstance();
+	string retString = Name + ";" + to_string(Level) + ";" + to_string(HP) + ";" + to_string(MP) + ";" + to_string(XP) + ";" + to_string(BaseAttack) + ";" + to_string(BaseDefence) + ";" + to_string(Perception) + ";";
+	retString += to_string(ItemFactory->GetIndexFromItem(CurrentWeapon)) + ";";
+	retString += to_string(ItemFactory->GetIndexFromItem(CurrentArmour)) + ";";
+	for (auto& item : Bag)
+	{
+		retString += to_string(ItemFactory::GetInstance()->GetIndexFromItem(item)) + ",";
+	}
+	retString += ";";
+	return retString;
+}
+
+void Character::AddXP(int _XP) 
+{
 	XP += _XP;
 	if (XP > Level) {
 		LevelUp();
 	}
 }
 
-void Character::LevelUp() {
+void Character::LevelUp() 
+{
 	Level++;
 	XP = 0;
 	HP += 10;
@@ -91,4 +109,30 @@ void Character::LevelUp() {
 	BaseAttack += 5;
 	BaseDefence += 5;
 	Perception += 1;
+}
+
+void Character::Load() 
+{
+	// Name Level HP MP XP Perception Attack Defence Weapon Armour Bag
+	vector<vector<string>> character = Parser::Parse(Name + ".wizard");
+	for (auto &elements : character) {
+		Level = stoi(elements[1]);
+		HP = stoi(elements[2]);
+		CurrentHP = HP;
+		MP = stoi(elements[3]);
+		XP = stoi(elements[4]);
+		Perception = stoi(elements[5]);
+		BaseAttack = stoi(elements[6]);
+		BaseDefence = stoi(elements[7]);
+		CurrentWeapon = dynamic_cast<Weapon*>(ItemFactory::GetInstance()->GetItemFromIndex(stoi(elements[8])));
+		CurrentArmour = dynamic_cast<Armour*>(ItemFactory::GetInstance()->GetItemFromIndex(stoi(elements[9])));
+
+		vector<string> bag;
+		Parser::split(elements[10], ',', bag);
+
+		for (auto& index : bag) 
+		{
+			AddToBag(ItemFactory::GetInstance()->GetItemFromIndex(stoi(index)));
+		}
+	}
 }

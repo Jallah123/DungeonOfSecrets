@@ -4,6 +4,7 @@
 #include <deque>
 #include <vector>
 #include <iostream>
+#include <fstream>
 #include <limits>
 #include "ItemFactory.h"
 
@@ -103,6 +104,12 @@ void Dungeon::HandleInput(string input)
 		break;
 	case use:
 		UseItem(value);
+		break;
+	case save:
+		Save();
+		break;
+	case load:
+		Load();
 		break;
 	default:
 		break;
@@ -405,6 +412,17 @@ void Dungeon::EnemiesAttack() {
 	{
 		enemies->at(i).Attack(Wizard);
 	}
+}
+
+void Dungeon::Save()
+{
+	ofstream output_file{ Wizard.GetName() + ".wizard" };
+	output_file << Wizard.GetSaveString();
+}
+
+void Dungeon::Load()
+{
+	Wizard.Load();
 }
 
 Dungeon::~Dungeon()

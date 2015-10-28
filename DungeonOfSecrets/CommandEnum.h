@@ -19,7 +19,7 @@ enum Commands {
 	openmap,
 	compass,
 	spawnsuperboss,
-	pickup
+	pickup,
 };
 
 static std::map<std::string, Commands> CommandsMap;

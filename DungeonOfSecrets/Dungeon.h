@@ -33,5 +33,7 @@ private:
 	void Look();
 	void Pickup(string value);
 	void UseItem(string value);
+	void Save();
+	void Load();
 };
 

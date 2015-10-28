@@ -53,6 +53,8 @@ public:
 	string GetName() { return Name; };
 	void AddToBag(Item* item) { Bag.push_back(item); };
 	void RemoveFromBag(Item* item) { auto i = find(Bag.begin(), Bag.end(), item); Bag.erase(i); };
+	string GetSaveString();
+	void Load();
 private:
 	string Name;
 	int x;

@@ -59,6 +59,24 @@ void ItemFactory::GenerateItems() {
 	}
 }
 
+int ItemFactory::GetIndexFromItem(Item* item) 
+{
+	int index = find(Items.begin(), Items.end(), item) - Items.begin();
+	if (index == Items.size()) {
+		return -1;
+	}
+	return index;
+}
+
+Item* ItemFactory::GetItemFromIndex(int index) 
+{
+	if (index == -1) {
+		return nullptr;
+	}
+	return Items.at(index);
+}
+
+
 ItemFactory::~ItemFactory()
 {
 }
