@@ -5,10 +5,9 @@ class Armour :
 {
 public:
 	Armour() { };
-	Armour(string _Name, int _Defence) : Item(_Name) { Defence = _Defence; };
-	int GetDefence() { return Defence; };
+	Armour(string _Name, int _Defence) : Item(_Name, _Defence) { };
+	int GetDefence() { return Value; };
 	~Armour();
 private:
-	int Defence;
 	void DoAction() {};
 };

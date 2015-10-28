@@ -5,11 +5,10 @@ class Weapon :
 {
 public:
 	Weapon() {};
-	Weapon(string _Name, int _Damage) : Item(_Name) { Damage = _Damage; };
+	Weapon(string _Name, int _Damage) : Item(_Name, _Damage) { };
 	~Weapon();
-	int GetDamage() { return Damage; };
+	int GetDamage() { return Value; };
 private:
-	int Damage;
 	void DoAction() {};
 };
 

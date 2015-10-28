@@ -1,0 +1,57 @@
+/ Itemname type value
+/ HP pots
+Small HP Potion;hppotion;10
+Medium HP Potion;hppotion;25
+Big HP Potion;hppotion;50
+Ultra HP Potion;hppotion;100
+Mega Ultra Godlike HP Potion;hppotion;250
+/ MP pots
+Small MP Potion;mppotion;10
+Medium MP Potion;mppotion;25
+Big MP Potion;mppotion;50
+Ultra MP Potion;mppotion;100
+Mega Ultra Godlike MP Potion;mppotion;250
+/ HMP pots
+Small HMP Potion;hmppotion;10
+Medium HMP Potion;hmppotion;25
+Big HMP Potion;hmppotion;50
+Ultra HMP Potion;hmppotion;100
+Mega Ultra Godlike HMP Potion;hmppotion;250
+/ Weapons
+Branch;weapon;5
+Carrot;weapon;5
+Broom;weapon;10
+Normal Wand;weapon;25
+Good Wand;weapon;50
+Super Wand;weapon;100
+Hawthorn;weapon;150
+Blackthorn;weapon;250
+Phoenix Wand;weapon;350
+Elder Wand;weapon;400
+/ Armour
+Damaged Cloak;armour;5
+Cape;armour;10
+Sorting hat;armour;15
+Helmet;armour;25
+Armoured Cloak;armour;50
+Enhanced Cloak;armour;75
+Dragonskin Cloak;armour;100
+Enchanced Pants;armour;200
+Dragonskin Pants;armour;350
+Invisibility Cloak;armour;999
+/ Useless items
+Pot;misc;0
+Glasses;misc;0
+Broken Wand;misc;0
+Broken Broom;misc;0
+Paper;misc;0
+Book;misc;0
+Feather;misc;0
+Candy;misc;0
+Candle;misc;0
+Coins;misc;0
+Fireworks;misc;0
+Toad;misc;0
+Cat;misc;0
+Owl;misc;0
+Petfood;misc;0
