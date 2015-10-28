@@ -12,18 +12,24 @@
 Dungeon::Dungeon(string name)
 {
 	unique_ptr<Layer>firstLayer(new Layer{ Enums::Easy });
+	unique_ptr<Layer>secondLayer(new Layer{ Enums::Medium });
+	unique_ptr<Layer>thirdLayer(new Layer{ Enums::Hard });
+	unique_ptr<Layer>bossLayer(new Layer{ Enums::Boss });
 	// firstLayer.get()->SetLadderDownRoom(nullptr);
-	CurrentLayer = firstLayer.get();
 	Layers.push_back(move(firstLayer));
+	Layers.push_back(move(secondLayer));
+	Layers.push_back(move(thirdLayer));
+	Layers.push_back(move(bossLayer));
+	for (int i = 0; i < Layers.size() - 1; i++) {
+		Layers.at(i).get()->GetLadderRoom()->AddDirection(Directions::Down, Layers.at(i + 1)->GetRoom(Utility::GetInstance()->RandomNumber(0, 4), Utility::GetInstance()->RandomNumber(0, 4)));
+	}
+	CurrentLayer = firstLayer.get();
 	Wizard = Character{ name };
 	InitializeCommands();
 	InitializeDirections();
 	InitializeStrings();
 	CurrentLayer->GetRoom(Wizard.GetX(), Wizard.GetY())->Enter(Wizard);
 	Run();
-	//Layers.push_back(Layer{ Medium });
-	//Layers.push_back(Layer{ Hard });
-	//Layers.push_back(Layer{ Boss });
 }
 
 void Dungeon::Run()
@@ -463,6 +469,13 @@ void Dungeon::Go(string Direction)
 		if (!r->DirectionDestroyed(dir->second)) {
 			Wizard.Move(r->GetRoomByDirection(dir->second)->GetX(), r->GetRoomByDirection(dir->second)->GetY());
 			r->GetRoomByDirection(dir->second)->Enter(Wizard);
+			if (dir->second == Directions::Down) {
+				// KAN GEEN POINTER VINDEN IN VECTOR MET UNIQUE POINTERS
+				int index = find(Layers.begin(), Layers.end(), CurrentLayer) - Layers.begin();
+				if (index > 0 && index < Layers.size()) {
+					CurrentLayer = Layers.at(index).get();
+				}
+			}
 		}
 		else {
 			cout << "This passage has been destroyed." << endl;
