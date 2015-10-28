@@ -310,10 +310,12 @@ void Dungeon::ShowAllInfo()
 	cout << "Perception: " << Wizard.GetPerception() << "\t";
 	cout << "BaseAttack: " << Wizard.GetBaseAttack() << "\t";
 	cout << "BaseDefence: " << Wizard.GetBaseDefence() << endl;
-	if (Wizard.GetWeapon()->GetName() != "")
+	if (Wizard.GetWeapon() != nullptr)
 	{
 		cout << "Weapon: " << Wizard.GetWeapon()->GetName() << ". Damage: " << Wizard.GetWeapon()->GetDamage() << endl;
-		cout << "Weapon: " << Wizard.GetArmour()->GetName() << ". Damage: " << Wizard.GetArmour()->GetDefence() << endl;
+	}
+	if (Wizard.GetArmour() != nullptr) {
+		cout << "Armour: " << Wizard.GetArmour()->GetName() << ". Defence: " << Wizard.GetArmour()->GetDefence() << endl;
 	}
 }
 
