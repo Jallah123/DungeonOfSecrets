@@ -40,6 +40,10 @@ public:
 	Room* GetPreviousRoom() { return PreviousRoom; };
 	void SetPreviousRoom(Room* _PreviousRoom) { PreviousRoom = _PreviousRoom; };
 	void SetDistance(int _Distance) { Distance = _Distance; };
+	void AddItem(Item* item) { Items.push_back(item); };
+	void RemoveItem(Item* item) { auto i = find(Items.begin(), Items.end(), item); Items.erase(i); };
+	Item* GetItem(int i);
+	void PrintItems();
 	~Room();
 private:
 	int Distance = INFINITY;
@@ -51,7 +55,7 @@ private:
 	bool visited = false;
 	bool destroyed = false;
 	Trap Trap;
-	vector<Item> Items;
+	vector<Item*> Items;
 	vector<Character> Enemies;
 	map<Directions, Room*> AdjecentRooms;
 };

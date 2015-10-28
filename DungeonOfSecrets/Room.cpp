@@ -64,6 +64,29 @@ Directions Room::GetDirectionByRoom(Room* room)
 	}
 }
 
+Item* Room::GetItem(int i)
+{
+	if (i < Items.size() && i >= 0) {
+		Item* item = Items.at(i);
+		RemoveItem(Items.at(i));
+		return item;
+	}
+	cout << "No such item." << endl;
+	return nullptr;
+}
+
+void Room::PrintItems()
+{
+	int i = 0;
+	cout << "You look around and see: " << endl;
+	for each (auto item in Items) {
+		cout << i++ << ". "<< item->GetName() << endl;
+	}
+	if (i == 0) {
+		cout << "Nothing." << endl;
+	}
+}
+
 Room::~Room()
 {
 }

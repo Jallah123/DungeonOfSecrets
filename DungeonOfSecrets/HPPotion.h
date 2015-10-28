@@ -1,5 +1,6 @@
 #pragma once
 #include "Item.h"
+
 class HPPotion :
 	public Item
 {

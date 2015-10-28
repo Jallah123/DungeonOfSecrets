@@ -1,11 +1,10 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "Item.h"
-#include "Weapon.h"
-#include "Armour.h"
 #include "Utility.h"
 #include <iostream>
+#include "Weapon.h"
+#include "Armour.h"
 
 using namespace std;
 
@@ -33,14 +32,15 @@ public:
 	int GetY() { return y; };
 	int GetBaseAttack() { return BaseAttack; };
 	int GetBaseDefence() { return BaseDefence; };
-	Weapon GetWeapon() { return CurrentWeapon; };
-	Armour GetArmour() { return CurrentArmour; };
+	Weapon* GetWeapon() { return CurrentWeapon; };
+	Armour* GetArmour() { return CurrentArmour; };
 	bool Attack(Character& enemy);
 	void AddXP(int _XP);
 	int GetLevel() { return Level; };
 	void Heal(int _HP) { CurrentHP += _HP; if (CurrentHP > HP) CurrentHP = HP; };
+	void Recharge(int _MP) { MP += _MP; };
 	void DrainMP(int _MP) { MP -= _MP; if (MP < 0) MP = 0; };
-	void UseItem(Item& item) { item.DoAction(); };
+	void UseItem(int i);
 	void Print() { cout << Name << " HP:" << CurrentHP << " Level: " << Level << endl; };
 	void ShowBag();
 	bool Damage(int dmg);
@@ -48,10 +48,10 @@ public:
 	int GetHP() { return HP; };
 	int GetMP() { return MP; };
 	int GetPerception() { return Perception; };
-	void EquipArmour(Armour& armour) { CurrentArmour = armour; };
-	void EquipWeapon(Weapon& weapon) { CurrentWeapon = weapon; };
+	void EquipArmour(Armour& armour) { CurrentArmour = &armour; };
+	void EquipWeapon(Weapon& weapon) { CurrentWeapon = &weapon; };
 	string GetName() { return Name; };
-	//void AddToBag(Item& item) { Bag.push_back(item); };
+	void AddToBag(Item* item) { Bag.push_back(item); };
 private:
 	string Name;
 	int x;
@@ -64,9 +64,9 @@ private:
 	int BaseAttack;
 	int BaseDefence;
 	int Perception;
-	Weapon CurrentWeapon;
-	Armour CurrentArmour;
+	Weapon* CurrentWeapon{ nullptr };
+	Armour* CurrentArmour{ nullptr };
 	void LevelUp();
-	//vector<Item> Bag;
+	vector<Item*> Bag;
 };
 

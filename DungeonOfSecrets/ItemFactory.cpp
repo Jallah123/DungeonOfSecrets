@@ -25,9 +25,9 @@ ItemFactory* ItemFactory::GetInstance() {
 
 Item* ItemFactory::GetRandomItem()
 {
-	//int number = Utility::GetInstance()->RandomNumber(0, Items.size()-1);
-	int number = 3;
+	int number = Utility::GetInstance()->RandomNumber(0, Items.size()-1);
 	Item* i = Items.at(number);
+	return i;
 }
 
 void ItemFactory::GenerateItems() {
@@ -53,7 +53,7 @@ void ItemFactory::GenerateItems() {
 			i = new Armour{ name, value };
 		}
 		else if (type == "misc") {
-			i = new Misc{ name };
+			i = new Misc{ name, value };
 		}
 		Items.push_back(i);
 	}

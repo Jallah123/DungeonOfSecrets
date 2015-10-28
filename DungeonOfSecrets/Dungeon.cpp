@@ -5,6 +5,7 @@
 #include <vector>
 #include <iostream>
 #include <limits>
+#include "ItemFactory.h"
 
 Dungeon::Dungeon(string name)
 {
@@ -18,7 +19,6 @@ Dungeon::Dungeon(string name)
 	InitializeStrings();
 	CurrentLayer->GetRoom(Wizard.GetX(), Wizard.GetY())->Enter(Wizard);
 	Run();
-
 	//Layers.push_back(Layer{ Medium });
 	//Layers.push_back(Layer{ Hard });
 	//Layers.push_back(Layer{ Boss });
@@ -92,8 +92,53 @@ void Dungeon::HandleInput(string input)
 	case spawnsuperboss:
 		SpawnSuperBoss(value);
 		break;
+	case look:
+		Look();
+		break;
+	case pickup:
+		Pickup(value);
+		break;
+	case bag:
+		Wizard.ShowBag();
+		break;
+	case use:
+		UseItem(value);
+		break;
 	default:
 		break;
+	}
+}
+
+void Dungeon::Look()
+{
+	GetCurrentRoom()->PrintItems();
+}
+
+void Dungeon::UseItem(string value)
+{
+	int val;
+	try {
+		val = stoi(value);
+	}
+	catch (exception e) {
+		cout << "Not a valid number." << endl;
+		return;
+	}
+	Wizard.UseItem(val);
+}
+
+void Dungeon::Pickup(string value) {
+	int val;
+	try {
+		val = stoi(value);
+	}
+	catch (exception e) {
+		cout << "Not a valid number." << endl;
+		return;
+	}
+	Item* i = GetCurrentRoom()->GetItem(val);
+	if (i != nullptr) {
+		Wizard.AddToBag(i);
 	}
 }
 
@@ -138,13 +183,13 @@ void Dungeon::SpawnSuperBoss(string value)
 	int x;
 	int y;
 	try {
-		x = stoi(value.substr(0, t ));
+		x = stoi(value.substr(0, t));
 		y = stoi(value.substr(t + 1, value.length() - 1));
 	}
 	catch (exception e) {
 
 	}
-	CurrentLayer->GetRoom(x-1, y-1)->AddEnemy(Character{ "Super Boss", 999999, 999999, 999999 , 999999 , 999999 ,999999 });
+	CurrentLayer->GetRoom(x - 1, y - 1)->AddEnemy(Character{ "Super Boss", 999999, 999999, 999999 , 999999 , 999999 ,999999 });
 }
 
 void Dungeon::UseCompass() {
@@ -265,10 +310,10 @@ void Dungeon::ShowAllInfo()
 	cout << "Perception: " << Wizard.GetPerception() << "\t";
 	cout << "BaseAttack: " << Wizard.GetBaseAttack() << "\t";
 	cout << "BaseDefence: " << Wizard.GetBaseDefence() << endl;
-	if (Wizard.GetWeapon().GetName() != "")
+	if (Wizard.GetWeapon()->GetName() != "")
 	{
-		cout << "Weapon: " << Wizard.GetWeapon().GetName() << ". Damage: " << Wizard.GetWeapon().GetDamage() << endl;
-		cout << "Weapon: " << Wizard.GetArmour().GetName() << ". Damage: " << Wizard.GetArmour().GetDefence() << endl;
+		cout << "Weapon: " << Wizard.GetWeapon()->GetName() << ". Damage: " << Wizard.GetWeapon()->GetDamage() << endl;
+		cout << "Weapon: " << Wizard.GetArmour()->GetName() << ". Damage: " << Wizard.GetArmour()->GetDefence() << endl;
 	}
 }
 

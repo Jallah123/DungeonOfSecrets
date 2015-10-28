@@ -30,5 +30,8 @@ private:
 	void Dijkstra();
 	void OpenMap();
 	void SpawnSuperBoss(string value);
+	void Look();
+	void Pickup(string value);
+	void UseItem(string value);
 };
 

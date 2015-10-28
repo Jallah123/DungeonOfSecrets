@@ -5,18 +5,41 @@ Character::~Character()
 {
 }
 
+void Character::UseItem(int i)
+{
+	if (i < Bag.size() && i >=0) {
+		Item* item = Bag.at(i);
+		item->DoAction();
+		return;
+	}
+	cout << "No such item." << endl;
+}
+
 void Character::ShowBag() {
 	cout << "You look into your bag and see:" <<endl;
-//	for each (Item item in Bag)
-//	{
-//		cout << item.GetName() << endl;
-//	}
-
+	int i = 0;
+	for each (Item* item in Bag)
+	{
+		cout << i << ". " << item->GetName() << endl;
+	}
+	if (i == 0) {
+		cout << "Nothing." << endl;
+	}
 }
 
 bool Character::Attack(Character& enemy) {
-	cout << "" << (BaseAttack + CurrentWeapon.GetDamage()) << " damage dealt to : " << enemy.GetName() << endl; 
-	return enemy.Damage(BaseAttack + CurrentWeapon.GetDamage());
+	int damage = BaseAttack - enemy.GetBaseDefence();
+	if (CurrentWeapon != nullptr) {
+		damage += CurrentWeapon->GetDamage();
+	}
+	if (enemy.CurrentArmour != nullptr) {
+		damage -= enemy.CurrentArmour->GetDefence();
+	}
+	if (damage < 0) {
+		damage = 0;
+	}
+	cout << "" << damage << " damage dealt to : " << enemy.GetName() << endl; 
+	return enemy.Damage(damage);
 }
 
 bool Character::Damage(int dmg) {

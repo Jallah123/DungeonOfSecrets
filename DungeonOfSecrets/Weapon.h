@@ -1,5 +1,6 @@
 #pragma once
 #include "Item.h"
+
 class Weapon :
 	public Item
 {
@@ -9,6 +10,6 @@ public:
 	~Weapon();
 	int GetDamage() { return Value; };
 private:
-	void DoAction() {};
+	void DoAction() { };
 };
 

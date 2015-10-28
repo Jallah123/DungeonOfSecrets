@@ -6,7 +6,7 @@ enum Commands {
 	attack,
 	use,
 	spell,
-	lookatmap,
+	look,
 	bag,
 	cheat,
 	save,
@@ -18,7 +18,8 @@ enum Commands {
 	showmap,
 	openmap,
 	compass,
-	spawnsuperboss
+	spawnsuperboss,
+	pickup
 };
 
 static std::map<std::string, Commands> CommandsMap;
@@ -28,7 +29,7 @@ static void InitializeCommands() {
 	CommandsMap["attack"] = attack;
 	CommandsMap["use"] = use;
 	CommandsMap["spell"] = spell;
-	CommandsMap["map"] = lookatmap;
+	CommandsMap["look"] = look;
 	CommandsMap["bag"] = bag;
 	CommandsMap["inventory"] = bag;
 	CommandsMap["iamnotworthy"] = cheat;
@@ -42,4 +43,5 @@ static void InitializeCommands() {
 	CommandsMap["compass"] = compass;
 	CommandsMap["openmap"] = openmap;
 	CommandsMap["spawnsuperboss"] = spawnsuperboss;
+	CommandsMap["pickup"] = pickup;
 }

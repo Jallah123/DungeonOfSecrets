@@ -1,5 +1,6 @@
 #pragma once
 #include "Item.h"
+
 class Armour :
 	public Item
 {
@@ -9,5 +10,5 @@ public:
 	int GetDefence() { return Value; };
 	~Armour();
 private:
-	void DoAction() {};
+	void DoAction() { };
 };

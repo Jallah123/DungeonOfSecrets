@@ -2,6 +2,7 @@
 #include "Utility.h"
 #include "CharacterFactory.h"
 #include "TrapFactory.h"
+#include "ItemFactory.h"
 #include <iostream>
 
 Layer::Layer(Enums::Difficulty difficulty)
@@ -28,6 +29,8 @@ void Layer::FillRooms(Enums::Difficulty difficulty)
 				room.get()->AddEnemy(CharacterFactory::GetInstance()->GetCharacterByDifficulty(difficulty));
 			if (Utility::GetInstance()->RandomNumber(0, 10) > 1)
 				room.get()->SetTrap(TrapFactory::GetInstance()->GetRandomTrap());
+			for (int i = 0; i < Utility::GetInstance()->RandomNumber(0, 2); i++)
+				room.get()->AddItem(ItemFactory::GetInstance()->GetRandomItem());
 		}
 	}
 }
