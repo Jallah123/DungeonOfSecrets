@@ -8,6 +8,7 @@
 #include <limits>
 #include "ItemFactory.h"
 #include <algorithm>
+#include <tuple>
 
 Dungeon::Dungeon(string name)
 {
@@ -227,9 +228,64 @@ void Dungeon::UseCompass() {
 	}
 	cout << endl;
 }
-
 void Dungeon::SpanningTree() {
-	vector<pair<Room*, Directions>> Edges;
+	/*
+	create a forest F (a set of trees), where each vertex in the graph is a separate tree
+	create a set S containing all the edges in the graph
+	while S is nonempty and F is not yet spanning
+	remove an edge with minimum weight from S
+	if the removed edge connects two different trees then add it to the forest F, combining two trees into a single tree
+	At the termination of the algorithm, the forest forms a minimum spanning forest of the graph. If the graph is connected, the forest has a single component and forms a minimum spanning tree.
+	*/
+	vector<tuple<Room*, Directions, Room*>> Vertexes;
+	vector<tuple<Room*, Directions, Room*>> Tree;
+	for each (auto& roomrow in CurrentLayer->GetRooms())
+	{
+		for each (auto& room in roomrow)
+		{
+			for each (auto& adjecentRoom in room.get()->GetAdjecentRooms())
+			{
+				Vertexes.push_back(make_tuple(room.get(), room.get()->GetDirectionByRoom(adjecentRoom.second), adjecentRoom.second));
+			}
+		}
+	}
+	int size = CurrentLayer->GetRooms().size();
+	while ((Tree.size() < ((size * (size - 1)) * 2) - ((size)* (size)-1))+1) {
+		int lowestWeight = numeric_limits<int>::max();
+		auto lowestTupel = Vertexes.at(0);
+		for each (auto& vertex in Vertexes)
+		{
+			if(get<2>(vertex)->GetWeigth() < lowestWeight && (Exists(Tree, get<0>(vertex)) || Exists(Tree, get<2>(vertex)))){
+				lowestWeight = get<2>(vertex)->GetWeigth();
+				lowestTupel = vertex;
+			}
+		}
+		Tree.push_back(lowestTupel);
+	}
+	for each (auto& edges in Tree)
+	{
+		if (get<1>(edges) == Directions::North) {
+			get<2>(edges)->DestroyEdge(Directions::South);
+			get<0>(edges)->DestroyEdge(Directions::North);
+		}
+		if (get<1>(edges) == Directions::West) {
+			get<2>(edges)->DestroyEdge(Directions::East);
+			get<0>(edges)->DestroyEdge(Directions::West);
+		}
+		if (get<1>(edges) == Directions::East) {
+			get<0>(edges)->DestroyEdge(Directions::West);
+			get<0>(edges)->DestroyEdge(Directions::East);
+		}
+		if (get<1>(edges) == Directions::South) {
+			get<0>(edges)->DestroyEdge(Directions::North);
+			get<0>(edges)->DestroyEdge(Directions::South);
+		}
+		//cout << get<0>(edges)->GetX()+1 << ":" << get<0>(edges)->GetY()+1 << " " << StringMap.at(get<1>(edges)) << " " << get<2>(edges)->GetX()+1 << ":" << get<2>(edges)->GetY()+1 << endl;
+	}
+}
+/*
+void Dungeon::SpanningTree() {
+	vector<tuple<Room*, Directions, Room*>> Edges;
 	Room* currentRoom = GetCurrentRoom();
 	Directions currentRoomMinimumWeightDirection;
 	int currentRoomMinimumWeight = numeric_limits<int>::max();
@@ -239,47 +295,55 @@ void Dungeon::SpanningTree() {
 			currentRoomMinimumWeightDirection = room.first;
 		}
 	}
-	Edges.push_back(make_pair(currentRoom, currentRoomMinimumWeightDirection));
-
-	while (Edges.size() < (CurrentLayer->GetRooms().size() * CurrentLayer->GetRooms().size())) {
+	Edges.push_back(make_tuple(currentRoom, currentRoomMinimumWeightDirection, currentRoom->GetRoomByDirection(currentRoomMinimumWeightDirection)));
+	int size = CurrentLayer->GetRooms().size();
+	
+	while (Edges.size() < ((size * (size - 1)) * 2) - ((size)* (size)-1)) {
 		Directions minimumWeightDirection;
 		int minimumWeight = numeric_limits<int>::max();
+		currentRoom = nullptr;
 		for (auto& room : Edges) {
-			for (auto& adjecentRoom : room.first->GetAdjecentRooms()) {
+			for (auto& adjecentRoom : get<0>(room)->GetAdjecentRooms()) {
 				bool exists = Exists(Edges, adjecentRoom.second);
 				if (adjecentRoom.second->GetWeigth() < minimumWeight && !exists) {
 					minimumWeight = adjecentRoom.second->GetWeigth();
-					minimumWeightDirection = room.first->GetDirectionByRoom(adjecentRoom.second);
+					minimumWeightDirection = adjecentRoom.second->GetDirectionByRoom(get<0>(room));
 					currentRoom = adjecentRoom.second;
 				}
 			}
 		}
-		Edges.push_back(make_pair(currentRoom, minimumWeightDirection));
-	}
-	for each (auto& roomrow in CurrentLayer->GetRooms())
-	{
-		for each (auto& room in roomrow)
-		{
-			for each (auto& adjecentRoom in room->GetAdjecentRooms())
-			{
-				Directions dir = room.get()->GetDirectionByRoom(adjecentRoom.second);
-				for each (auto& edges in Edges)
-				{
-					if (edges.first == adjecentRoom.second && edges.second == dir) {
-						adjecentRoom.second->DestroyEdge(dir);
-					}
-					else {
-
-					}
-				}
-			}
+		if (currentRoom == nullptr) { cout << "NULLPOINTER" << endl; }
+		else {
+			Edges.push_back(make_tuple(currentRoom, minimumWeightDirection, currentRoom->GetRoomByDirection(minimumWeightDirection)));
 		}
 	}
-}
 
-bool Dungeon::Exists(vector<pair<Room*, Directions>>& Edges, Room* Room) {
+	for each (auto& edges in Edges)
+	{
+		if (get<1>(edges) == Directions::North) {
+			get<2>(edges)->DestroyEdge(Directions::South);
+			get<0>(edges)->DestroyEdge(Directions::North);
+		}
+		if (get<1>(edges) == Directions::West) {
+			get<2>(edges)->DestroyEdge(Directions::East);
+			get<0>(edges)->DestroyEdge(Directions::West);
+		}
+		if (get<1>(edges) == Directions::East) {
+			get<0>(edges)->DestroyEdge(Directions::West);
+			get<0>(edges)->DestroyEdge(Directions::East);
+		}
+		if (get<1>(edges) == Directions::South) {
+			get<0>(edges)->DestroyEdge(Directions::North);
+			get<0>(edges)->DestroyEdge(Directions::South);
+		}
+		//cout << get<0>(edges)->GetX()+1 << ":" << get<0>(edges)->GetY()+1 << " " << StringMap.at(get<1>(edges)) << " " << get<2>(edges)->GetX()+1 << ":" << get<2>(edges)->GetY()+1 << endl;
+	}
+
+}
+*/
+bool Dungeon::Exists(vector<tuple<Room*, Directions, Room*>>& Edges, Room* Room) {
 	for (auto& pair : Edges) {
-		if (pair.first == Room) {
+		if (get<0>(pair) == Room || get<2>(pair) == Room) {
 			return true;
 		}
 	}
@@ -473,7 +537,7 @@ void Dungeon::Go(string Direction)
 				int index;
 				for (int i = 0; i < Layers.size(); i++) {
 					if (Layers.at(i).get() == CurrentLayer) {
-						index = i+1;
+						index = i + 1;
 					}
 				}
 				if (index > 0 && index < Layers.size()) {

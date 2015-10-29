@@ -36,6 +36,6 @@ private:
 	void UseItem(string value);
 	void Save();
 	void Load();
-	bool Exists(vector<pair<Room*, Directions>>& Edges, Room* Room);
+	bool Exists(vector<tuple<Room*, Directions, Room*>>& Edges, Room* Room);
 };
 
