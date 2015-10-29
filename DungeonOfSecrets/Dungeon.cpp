@@ -16,6 +16,7 @@ Dungeon::Dungeon(string name)
 	unique_ptr<Layer>thirdLayer(new Layer{ Enums::Hard });
 	unique_ptr<Layer>bossLayer(new Layer{ Enums::Boss });
 	// firstLayer.get()->SetLadderDownRoom(nullptr);
+	CurrentLayer = firstLayer.get();
 	Layers.push_back(move(firstLayer));
 	Layers.push_back(move(secondLayer));
 	Layers.push_back(move(thirdLayer));
@@ -23,7 +24,6 @@ Dungeon::Dungeon(string name)
 	for (int i = 0; i < Layers.size() - 1; i++) {
 		Layers.at(i).get()->GetLadderRoom()->AddDirection(Directions::Down, Layers.at(i + 1)->GetRoom(Utility::GetInstance()->RandomNumber(0, 4), Utility::GetInstance()->RandomNumber(0, 4)));
 	}
-	CurrentLayer = firstLayer.get();
 	Wizard = Character{ name };
 	InitializeCommands();
 	InitializeDirections();
@@ -470,8 +470,12 @@ void Dungeon::Go(string Direction)
 			Wizard.Move(r->GetRoomByDirection(dir->second)->GetX(), r->GetRoomByDirection(dir->second)->GetY());
 			r->GetRoomByDirection(dir->second)->Enter(Wizard);
 			if (dir->second == Directions::Down) {
-				// KAN GEEN POINTER VINDEN IN VECTOR MET UNIQUE POINTERS
-				int index = find(Layers.begin(), Layers.end(), CurrentLayer) - Layers.begin();
+				int index;
+				for (int i = 0; i < Layers.size(); i++) {
+					if (Layers.at(i).get() == CurrentLayer) {
+						index = i+1;
+					}
+				}
 				if (index > 0 && index < Layers.size()) {
 					CurrentLayer = Layers.at(index).get();
 				}
