@@ -245,17 +245,20 @@ void Dungeon::SpanningTree() {
 		{
 			for each (auto& adjecentRoom in room.get()->GetAdjecentRooms())
 			{
-				Vertexes.push_back(make_tuple(room.get(), room.get()->GetDirectionByRoom(adjecentRoom.second), adjecentRoom.second));
+				if(adjecentRoom.first == Directions::East || adjecentRoom.first == adjecentRoom.first == Directions::South)
+					Vertexes.push_back(make_tuple(room.get(), room.get()->GetDirectionByRoom(adjecentRoom.second), adjecentRoom.second));
 			}
 		}
 	}
 	int size = CurrentLayer->GetRooms().size();
-	while ((Tree.size() < ((size * (size - 1)) * 2) - ((size)* (size)-1))+1) {
+	// int amountToDestroy = ((size * (size - 1)) * 2) - ((size)* (size)-1);
+	int amountToDestroy = 16;
+	while (Tree.size() < amountToDestroy) {
 		int lowestWeight = numeric_limits<int>::max();
-		auto lowestTupel = Vertexes.at(0);
+		tuple<Room*, Directions, Room*> lowestTupel;
 		for each (auto& vertex in Vertexes)
 		{
-			if(get<2>(vertex)->GetWeigth() < lowestWeight && (Exists(Tree, get<0>(vertex)) || Exists(Tree, get<2>(vertex)))){
+			if(get<2>(vertex)->GetWeigth() < lowestWeight && (!Exists(Tree, get<0>(vertex)) || !Exists(Tree, get<2>(vertex)))){
 				lowestWeight = get<2>(vertex)->GetWeigth();
 				lowestTupel = vertex;
 			}
@@ -267,18 +270,22 @@ void Dungeon::SpanningTree() {
 		if (get<1>(edges) == Directions::North) {
 			get<2>(edges)->DestroyEdge(Directions::South);
 			get<0>(edges)->DestroyEdge(Directions::North);
+			continue;
 		}
 		if (get<1>(edges) == Directions::West) {
 			get<2>(edges)->DestroyEdge(Directions::East);
 			get<0>(edges)->DestroyEdge(Directions::West);
+			continue;
 		}
 		if (get<1>(edges) == Directions::East) {
 			get<0>(edges)->DestroyEdge(Directions::West);
 			get<0>(edges)->DestroyEdge(Directions::East);
+			continue;
 		}
 		if (get<1>(edges) == Directions::South) {
 			get<0>(edges)->DestroyEdge(Directions::North);
 			get<0>(edges)->DestroyEdge(Directions::South);
+			continue;
 		}
 		//cout << get<0>(edges)->GetX()+1 << ":" << get<0>(edges)->GetY()+1 << " " << StringMap.at(get<1>(edges)) << " " << get<2>(edges)->GetX()+1 << ":" << get<2>(edges)->GetY()+1 << endl;
 	}
@@ -341,6 +348,7 @@ void Dungeon::SpanningTree() {
 
 }
 */
+
 bool Dungeon::Exists(vector<tuple<Room*, Directions, Room*>>& Edges, Room* Room) {
 	for (auto& pair : Edges) {
 		if (get<0>(pair) == Room || get<2>(pair) == Room) {
