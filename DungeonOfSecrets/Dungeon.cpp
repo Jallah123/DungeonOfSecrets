@@ -257,18 +257,34 @@ void Dungeon::Prim()
 		Tree.push_back(LowestWeightRoom);
 	}
 
+	DestroyMap();
+
 	DestroyEdges(Tree);
+}
+
+void Dungeon::DestroyMap()
+{
+	for each (auto& RoomRow in CurrentLayer->GetRooms())
+	{
+		for each (auto& Room in RoomRow)
+		{
+			for each (auto& AdjecentRoom in Room.get()->GetAdjecentRooms())
+			{
+				Room.get()->DestroyEdge(Room.get()->GetDirectionByRoom(AdjecentRoom.second));
+			}
+		}
+	}
 }
 
 void Dungeon::DestroyEdges(vector<tuple<Room*, Directions, Room*>> Tree) 
 {
 	for each (auto Edge in Tree)
 	{
-		get<0>(Edge)->DestroyEdge(get<1>(Edge));
+		get<0>(Edge)->AddDirection(get<1>(Edge), get<2>(Edge));
 		if(get<1>(Edge) == Directions::North)
-			get<2>(Edge)->DestroyEdge(Directions::South);
+			get<2>(Edge)->AddDirection(Directions::South, get<0>(Edge));
 		if(get<1>(Edge) == Directions::West)
-			get<2>(Edge)->DestroyEdge(Directions::East);
+			get<2>(Edge)->AddDirection(Directions::East, get<0>(Edge));
 	}
 }
 
