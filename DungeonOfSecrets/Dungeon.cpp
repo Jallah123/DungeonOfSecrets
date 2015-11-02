@@ -120,7 +120,7 @@ void Dungeon::HandleInput(string input)
 		Load();
 		break;
 	case grenade:
-		SpanningTree();
+		Prim();
 		break;
 	default:
 		break;
@@ -228,6 +228,62 @@ void Dungeon::UseCompass() {
 	}
 	cout << endl;
 }
+
+void Dungeon::Prim() 
+{
+	vector<Room*> Vertexes;
+	vector<tuple<Room*, Directions, Room*>> Tree;
+
+	Vertexes.push_back(GetCurrentRoom());
+
+	Room* CurrentRoom = GetCurrentRoom();
+
+	while (Tree.size() <= 24) {
+		int LowestWeight = numeric_limits<int>::max();
+		tuple<Room*, Directions, Room*> LowestWeightRoom;
+		for each (auto& Edge in Vertexes)
+		{
+			for each (auto& AdjecentRoom in Edge->GetAdjecentRooms())
+			{
+				Room* Room = AdjecentRoom.second;
+				if (Room->GetWeigth() < LowestWeight && !ExistsInTree(Tree, Room))
+				{
+					LowestWeight = Room->GetWeigth();
+					LowestWeightRoom = make_tuple(Edge, Edge->GetDirectionByRoom(Room), Room);
+				}
+			}
+		}
+		Vertexes.push_back(get<2>(LowestWeightRoom));
+		Tree.push_back(LowestWeightRoom);
+	}
+
+	DestroyEdges(Tree);
+}
+
+void Dungeon::DestroyEdges(vector<tuple<Room*, Directions, Room*>> Tree) 
+{
+	for each (auto Edge in Tree)
+	{
+		get<0>(Edge)->DestroyEdge(get<1>(Edge));
+		if(get<1>(Edge) == Directions::North)
+			get<2>(Edge)->DestroyEdge(Directions::South);
+		if(get<1>(Edge) == Directions::West)
+			get<2>(Edge)->DestroyEdge(Directions::East);
+	}
+}
+
+bool Dungeon::ExistsInTree(vector<tuple<Room*, Directions, Room*>> Tree, Room* Room)
+{
+	for each (auto Edge in Tree)
+	{
+		if (get<2>(Edge) == Room)
+			return true;
+	}
+	return false;
+}
+
+
+
 void Dungeon::SpanningTree() {
 	/*
 	create a forest F (a set of trees), where each vertex in the graph is a separate tree

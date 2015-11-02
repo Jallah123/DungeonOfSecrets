@@ -38,4 +38,7 @@ private:
 	void Load();
 	bool Exists(vector<tuple<Room*, Directions, Room*>>& Edges, Room* Room);
 	bool Exists(vector<tuple<Room*, Directions>>& Edges, Room* Room);
+	void Dungeon::Prim();
+	bool Dungeon::ExistsInTree(vector<tuple<Room*, Directions, Room*>> Tree, Room* Room);
+	void Dungeon::DestroyEdges(vector<tuple<Room*, Directions, Room*>> Tree);
 };
