@@ -239,7 +239,7 @@ void Dungeon::Prim()
 	Room* CurrentRoom = GetCurrentRoom();
 
 	int size = CurrentLayer->GetRooms().size();
-	while (Tree.size() < (size*size) - 1) 
+	while (Tree.size() < (size*size) - 1)
 	{
 		int LowestWeight = numeric_limits<int>::max();
 		tuple<Room*, Directions, Room*> LowestWeightRoom;
@@ -287,11 +287,11 @@ void Dungeon::DestroyMap()
 	}
 }
 
-void Dungeon::AddEdges(vector<tuple<Room*, Directions, Room*>> Tree)
+void Dungeon::AddEdges(vector<tuple<Room*, Directions, Room*>>& Tree)
 {
 	for each (auto Edge in Tree)
 	{
-		cout << get<0>(Edge)->GetX() << ":" << get<0>(Edge)->GetY() << " to " << get<2>(Edge)->GetX() << ":" << get<0>(Edge)->GetY() << endl;
+		cout << get<0>(Edge)->GetX() << ":" << get<0>(Edge)->GetY() << " to " << get<2>(Edge)->GetX() << ":" << get<2>(Edge)->GetY() << endl;
 		if (get<1>(Edge) == Directions::North)
 		{
 			get<2>(Edge)->AddDirection(Directions::South, get<0>(Edge));
