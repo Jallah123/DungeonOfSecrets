@@ -246,7 +246,7 @@ void Dungeon::Prim()
 			for each (auto& AdjecentRoom in Edge->GetAdjecentRooms())
 			{
 				Room* Room = AdjecentRoom.second;
-				if (Room->GetWeigth() < LowestWeight && !ExistsInTree(Tree, Room))
+				if (Room->GetWeigth() < LowestWeight && !ExistsInTree(Tree, Room) && Edge != Room)
 				{
 					LowestWeight = Room->GetWeigth();
 					LowestWeightRoom = make_tuple(Edge, Edge->GetDirectionByRoom(Room), Room);
@@ -280,11 +280,27 @@ void Dungeon::DestroyEdges(vector<tuple<Room*, Directions, Room*>> Tree)
 {
 	for each (auto Edge in Tree)
 	{
-		get<0>(Edge)->AddDirection(get<1>(Edge), get<2>(Edge));
-		if(get<1>(Edge) == Directions::North)
+		cout << get<0>(Edge)->GetX() << ":" << get<0>(Edge)->GetY() << " to " << get<2>(Edge)->GetX() << ":" << get<0>(Edge)->GetY() << endl;
+		if (get<1>(Edge) == Directions::North)
+		{
 			get<2>(Edge)->AddDirection(Directions::South, get<0>(Edge));
-		if(get<1>(Edge) == Directions::West)
+			get<0>(Edge)->AddDirection(Directions::North, get<2>(Edge));
+		}
+		if (get<1>(Edge) == Directions::South)
+		{
+			get<2>(Edge)->AddDirection(Directions::North, get<0>(Edge));
+			get<0>(Edge)->AddDirection(Directions::South, get<2>(Edge));
+		}
+		if (get<1>(Edge) == Directions::West)
+		{
 			get<2>(Edge)->AddDirection(Directions::East, get<0>(Edge));
+			get<0>(Edge)->AddDirection(Directions::West, get<2>(Edge));
+		}
+		if (get<1>(Edge) == Directions::East)
+		{
+			get<2>(Edge)->AddDirection(Directions::West, get<0>(Edge));
+			get<0>(Edge)->AddDirection(Directions::East, get<2>(Edge));
+		}
 	}
 }
 
