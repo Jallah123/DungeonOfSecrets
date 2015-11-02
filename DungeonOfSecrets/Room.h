@@ -48,7 +48,7 @@ public:
 	void PrintItems();
 	~Room();
 private:
-	int Distance = INFINITY;
+	int Distance = numeric_limits<int>::max();
 	Room* PreviousRoom{ nullptr };
 	string Description;
 	Enums::Difficulty Difficulty;
