@@ -38,4 +38,5 @@ private:
 	void Load();
 	bool Exists(vector<tuple<Room*, Directions, Room*>>& Edges, Room* Room);
 	bool Exists(vector<tuple<Room*, Directions>>& Edges, Room* Room);
+	void ResetDistances();
 };

@@ -229,14 +229,6 @@ void Dungeon::UseCompass() {
 	cout << endl;
 }
 void Dungeon::SpanningTree() {
-	/*
-	create a forest F (a set of trees), where each vertex in the graph is a separate tree
-	create a set S containing all the edges in the graph
-	while S is nonempty and F is not yet spanning
-	remove an edge with minimum weight from S
-	if the removed edge connects two different trees then add it to the forest F, combining two trees into a single tree
-	At the termination of the algorithm, the forest forms a minimum spanning forest of the graph. If the graph is connected, the forest has a single component and forms a minimum spanning tree.
-	*/
 	vector<tuple<Room*, Directions, Room*>> Vertexes;
 	vector<tuple<Room*, Directions, Room*>> Tree;
 	for each (auto& roomrow in CurrentLayer->GetRooms())
@@ -245,20 +237,20 @@ void Dungeon::SpanningTree() {
 		{
 			for each (auto& adjecentRoom in room.get()->GetAdjecentRooms())
 			{
-				if(adjecentRoom.first == Directions::East || adjecentRoom.first == adjecentRoom.first == Directions::South)
+				if (adjecentRoom.first == Directions::East || adjecentRoom.first == adjecentRoom.first == Directions::South)
 					Vertexes.push_back(make_tuple(room.get(), room.get()->GetDirectionByRoom(adjecentRoom.second), adjecentRoom.second));
 			}
 		}
 	}
 	int size = CurrentLayer->GetRooms().size();
-	// int amountToDestroy = ((size * (size - 1)) * 2) - ((size)* (size)-1);
-	int amountToDestroy = 16;
+	int amountToDestroy = ((size * (size - 1)) * 2) - ((size)* (size)-1);
+	//int amountToDestroy = 16;
 	while (Tree.size() < amountToDestroy) {
 		int lowestWeight = numeric_limits<int>::max();
 		tuple<Room*, Directions, Room*> lowestTupel;
 		for each (auto& vertex in Vertexes)
 		{
-			if(get<2>(vertex)->GetWeigth() < lowestWeight && (!Exists(Tree, get<0>(vertex)) || !Exists(Tree, get<2>(vertex)))){
+			if (get<2>(vertex)->GetWeigth() < lowestWeight && (!Exists(Tree, get<0>(vertex)) || !Exists(Tree, get<2>(vertex)))) {
 				lowestWeight = get<2>(vertex)->GetWeigth();
 				lowestTupel = vertex;
 			}
@@ -278,12 +270,12 @@ void Dungeon::SpanningTree() {
 			continue;
 		}
 		if (get<1>(edges) == Directions::East) {
-			get<0>(edges)->DestroyEdge(Directions::West);
+			get<2>(edges)->DestroyEdge(Directions::West);
 			get<0>(edges)->DestroyEdge(Directions::East);
 			continue;
 		}
 		if (get<1>(edges) == Directions::South) {
-			get<0>(edges)->DestroyEdge(Directions::North);
+			get<2>(edges)->DestroyEdge(Directions::North);
 			get<0>(edges)->DestroyEdge(Directions::South);
 			continue;
 		}
@@ -304,7 +296,7 @@ void Dungeon::SpanningTree() {
 	}
 	Edges.push_back(make_tuple(currentRoom, currentRoomMinimumWeightDirection, currentRoom->GetRoomByDirection(currentRoomMinimumWeightDirection)));
 	int size = CurrentLayer->GetRooms().size();
-	
+
 	while (Edges.size() < ((size * (size - 1)) * 2) - ((size)* (size)-1)) {
 		Directions minimumWeightDirection;
 		int minimumWeight = numeric_limits<int>::max();
@@ -392,20 +384,13 @@ void Dungeon::Dijkstra() {
 
 void Dungeon::UseTalisman()
 {
-	for each (auto& roomrow in CurrentLayer->GetRooms())
-	{
-		for each (auto& room in roomrow)
-		{
-			room.get()->SetDistance(numeric_limits<int>::max());
-		}
-	}
+	ResetDistances();
 	Room* CurrentRoom = GetCurrentRoom();
 	if (CurrentRoom == CurrentLayer->GetLadderRoom()) {
 		cout << "You are already in the ladderroom." << endl;
 		return;
 	}
 	deque<Room*> queue;
-	vector<Room*> visited;
 	CurrentRoom->SetDistance(0);
 	queue.push_back(CurrentRoom);
 
@@ -413,23 +398,33 @@ void Dungeon::UseTalisman()
 	{
 		CurrentRoom = queue.back();
 		queue.pop_back();
-		visited.push_back(CurrentRoom);
 
 		map<Directions, Room*> AdjecentRooms = CurrentRoom->GetAdjecentRooms();
 		for each (pair<Directions, Room*> room in AdjecentRooms)
 		{
-			if (find(visited.begin(), visited.end(), room.second) == visited.end() && find(queue.begin(), queue.end(), room.second) == queue.end())
+			if (room.second->GetDistance() == numeric_limits<int>::max())
 			{
 				room.second->SetDistance(CurrentRoom->GetDistance() + 1);
 				queue.push_back(room.second);
-				if (room.second == CurrentLayer->GetLadderRoom()) {
+				if (room.second == CurrentLayer->GetLadderRoom())
+				{
 					cout << "Total " << room.second->GetDistance() << " steps till the ladder room." << endl;
 					return;
 				}
 			}
 		}
 	}
-	
+}
+
+void Dungeon::ResetDistances()
+{
+	for each (auto& roomrow in CurrentLayer->GetRooms())
+	{
+		for each (auto& room in roomrow)
+		{
+			room.get()->SetDistance(numeric_limits<int>::max());
+		}
+	}
 }
 
 void Dungeon::ShowAllInfo()
