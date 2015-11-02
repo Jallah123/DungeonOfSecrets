@@ -229,7 +229,7 @@ void Dungeon::UseCompass() {
 	cout << endl;
 }
 
-void Dungeon::Prim() 
+void Dungeon::Prim()
 {
 	vector<Room*> Vertexes;
 	vector<tuple<Room*, Directions, Room*>> Tree;
@@ -238,7 +238,9 @@ void Dungeon::Prim()
 
 	Room* CurrentRoom = GetCurrentRoom();
 
-	while (Tree.size() <= 24) {
+	int size = CurrentLayer->GetRooms().size();
+	while (Tree.size() < (size*size) - 1) 
+	{
 		int LowestWeight = numeric_limits<int>::max();
 		tuple<Room*, Directions, Room*> LowestWeightRoom;
 		for each (auto& Edge in Vertexes)
@@ -258,8 +260,17 @@ void Dungeon::Prim()
 	}
 
 	DestroyMap();
+	AddEdges(Tree);
+}
 
-	DestroyEdges(Tree);
+bool Dungeon::ExistsInTree(vector<tuple<Room*, Directions, Room*>> Tree, Room* Room)
+{
+	for each (auto Edge in Tree)
+	{
+		if (get<2>(Edge) == Room || get<0>(Edge) == Room)
+			return true;
+	}
+	return false;
 }
 
 void Dungeon::DestroyMap()
@@ -276,7 +287,7 @@ void Dungeon::DestroyMap()
 	}
 }
 
-void Dungeon::DestroyEdges(vector<tuple<Room*, Directions, Room*>> Tree) 
+void Dungeon::AddEdges(vector<tuple<Room*, Directions, Room*>> Tree)
 {
 	for each (auto Edge in Tree)
 	{
@@ -304,18 +315,6 @@ void Dungeon::DestroyEdges(vector<tuple<Room*, Directions, Room*>> Tree)
 	}
 }
 
-bool Dungeon::ExistsInTree(vector<tuple<Room*, Directions, Room*>> Tree, Room* Room)
-{
-	for each (auto Edge in Tree)
-	{
-		if (get<2>(Edge) == Room)
-			return true;
-	}
-	return false;
-}
-
-
-
 void Dungeon::SpanningTree() {
 	/*
 	create a forest F (a set of trees), where each vertex in the graph is a separate tree
@@ -333,7 +332,7 @@ void Dungeon::SpanningTree() {
 		{
 			for each (auto& adjecentRoom in room.get()->GetAdjecentRooms())
 			{
-				if(adjecentRoom.first == Directions::East || adjecentRoom.first == adjecentRoom.first == Directions::South)
+				if (adjecentRoom.first == Directions::East || adjecentRoom.first == adjecentRoom.first == Directions::South)
 					Vertexes.push_back(make_tuple(room.get(), room.get()->GetDirectionByRoom(adjecentRoom.second), adjecentRoom.second));
 			}
 		}
@@ -346,7 +345,7 @@ void Dungeon::SpanningTree() {
 		tuple<Room*, Directions, Room*> lowestTupel;
 		for each (auto& vertex in Vertexes)
 		{
-			if(get<2>(vertex)->GetWeigth() < lowestWeight && (!Exists(Tree, get<0>(vertex)) || !Exists(Tree, get<2>(vertex)))){
+			if (get<2>(vertex)->GetWeigth() < lowestWeight && (!Exists(Tree, get<0>(vertex)) || !Exists(Tree, get<2>(vertex)))) {
 				lowestWeight = get<2>(vertex)->GetWeigth();
 				lowestTupel = vertex;
 			}
@@ -392,7 +391,7 @@ void Dungeon::SpanningTree() {
 	}
 	Edges.push_back(make_tuple(currentRoom, currentRoomMinimumWeightDirection, currentRoom->GetRoomByDirection(currentRoomMinimumWeightDirection)));
 	int size = CurrentLayer->GetRooms().size();
-	
+
 	while (Edges.size() < ((size * (size - 1)) * 2) - ((size)* (size)-1)) {
 		Directions minimumWeightDirection;
 		int minimumWeight = numeric_limits<int>::max();

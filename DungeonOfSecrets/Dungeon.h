@@ -40,6 +40,6 @@ private:
 	bool Exists(vector<tuple<Room*, Directions>>& Edges, Room* Room);
 	void Dungeon::Prim();
 	bool Dungeon::ExistsInTree(vector<tuple<Room*, Directions, Room*>> Tree, Room* Room);
-	void Dungeon::DestroyEdges(vector<tuple<Room*, Directions, Room*>> Tree);
+	void Dungeon::AddEdges(vector<tuple<Room*, Directions, Room*>> Tree);
 	void Dungeon::DestroyMap();
 };
