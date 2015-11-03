@@ -234,11 +234,11 @@ void Dungeon::Prim()
 	vector<Room*> Vertexes;
 	vector<tuple<Room*, Directions, Room*>> Tree;
 
-	Vertexes.push_back(GetCurrentRoom());
-
 	Room* CurrentRoom = GetCurrentRoom();
 
-	while (Tree.size() <= 24) {
+	Vertexes.push_back(CurrentRoom);
+
+	while (Vertexes.size() != 25) {
 		int LowestWeight = numeric_limits<int>::max();
 		tuple<Room*, Directions, Room*> LowestWeightRoom;
 		for each (auto& Edge in Vertexes)
@@ -246,7 +246,7 @@ void Dungeon::Prim()
 			for each (auto& AdjecentRoom in Edge->GetAdjecentRooms())
 			{
 				Room* Room = AdjecentRoom.second;
-				if (Room->GetWeigth() < LowestWeight && !ExistsInTree(Tree, Room) && Edge != Room)
+				if (Room->GetWeigth() < LowestWeight && !ExistsInVisited(Vertexes, Room) && Edge != Room)
 				{
 					LowestWeight = Room->GetWeigth();
 					LowestWeightRoom = make_tuple(Edge, Edge->GetDirectionByRoom(Room), Room);
@@ -256,10 +256,26 @@ void Dungeon::Prim()
 		Vertexes.push_back(get<2>(LowestWeightRoom));
 		Tree.push_back(LowestWeightRoom);
 	}
-
+	CheckDuplicated(Vertexes);
 	DestroyMap();
 
 	DestroyEdges(Tree);
+}
+
+void Dungeon::CheckDuplicated(vector<Room*> Vertexes)
+{
+	for each (Room* Room in Vertexes)
+	{
+		if (ExistsInVisited(Vertexes, Room))
+			cout << "KUT ZOOI" << endl;
+	}
+}
+
+bool Dungeon::ExistsInVisited(vector<Room*> Vertexes, Room* Room)
+{
+	if (find(Vertexes.begin(), Vertexes.end(), Room) != Vertexes.end())
+		return true;
+	return false;
 }
 
 void Dungeon::DestroyMap()
@@ -280,7 +296,7 @@ void Dungeon::DestroyEdges(vector<tuple<Room*, Directions, Room*>> Tree)
 {
 	for each (auto Edge in Tree)
 	{
-		cout << get<0>(Edge)->GetX() << ":" << get<0>(Edge)->GetY() << " to " << get<2>(Edge)->GetX() << ":" << get<0>(Edge)->GetY() << endl;
+		cout << get<0>(Edge)->GetX() << ":" << get<0>(Edge)->GetY() << " to " << get<2>(Edge)->GetX() << ":" << get<2>(Edge)->GetY() << endl;
 		if (get<1>(Edge) == Directions::North)
 		{
 			get<2>(Edge)->AddDirection(Directions::South, get<0>(Edge));

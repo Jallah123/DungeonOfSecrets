@@ -42,4 +42,6 @@ private:
 	bool Dungeon::ExistsInTree(vector<tuple<Room*, Directions, Room*>> Tree, Room* Room);
 	void Dungeon::DestroyEdges(vector<tuple<Room*, Directions, Room*>> Tree);
 	void Dungeon::DestroyMap();
+	bool Dungeon::ExistsInVisited(vector<Room*> Vertexes, Room* Room);
+	void Dungeon::CheckDuplicated(vector<Room*> Vertexes);
 };
